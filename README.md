@@ -1,5 +1,5 @@
 # jamutils
-A set of core utilities written in the C99 standard
+A set of core utilities written in the C99 standard.
 
 # Abstract
 They are highly minimalist by virtue but flags will be added for
@@ -18,9 +18,12 @@ There are one sentence descriptions in the source code header.
 # Installation
 There aren't any makefiles yet; that too will be added soon. For now you must
 compile each program manually. Everything has been tested on gcc, clang,
-and tcc. The intended flags are: -std=c99 -pedantic -Wall -Wextra
--Wno-deprecated-declarations -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=200809L
--D_XOPEN_SOURCE=700
+and tcc. Tested on glibc as far back as version 2.25.
+The intended flags are: -std=c99 -pedantic -Wall -Wextra -Os
+-Wno-deprecated-declarations -D_DEFAULT_SOURCE -D_BSD_SOURCE
+-D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700
+
+Of course, use the -lm flag where appropriate.
 
 You can skip the define flags (the ones beginning with D_) since they are
 already defined in the main header file.
