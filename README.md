@@ -18,10 +18,9 @@ There are one sentence descriptions in the source code header.
 # Installation
 There aren't any makefiles yet; that too will be added soon. For now you must
 compile each program manually. Everything has been tested on gcc, clang,
-and tcc. Tested on glibc as far back as version 2.25.
-The intended flags are: -std=c99 -pedantic -Wall -Wextra -Os
--Wno-deprecated-declarations -D_DEFAULT_SOURCE -D_BSD_SOURCE
--D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700
+and tcc. Tested on glibc as far back as version 2.25. The intended flags are:
+-std=c99 -pedantic -Wall -Wextra -Os -Wno-deprecated-declarations
+-D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700
 
 Of course, use the -lm flag where appropriate.
 
