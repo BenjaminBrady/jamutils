@@ -1,0 +1,32 @@
+.TH WC 1 wc
+.SH NAME
+wc - print various counts of file attributes (bytes, lines, etc.)
+.SH SYNOPSIS
+.B wc
+.RB [ \-h ]
+.IR FILE ...
+.SH OPTIONS
+.TP
+.B \-h
+Print the label of each column (file: lines, words, bytes, line length) before
+printing the counts.
+.SH DESCRIPTION
+Print various counts for each of the inputted files.
+
+The outputted counts are: lines, words, bytes, and line length.
+
+If more then one file is given then print the
+total across all of the attribute counts.
+
+Return 1 if no files are provided. If there is an error reading any file then
+print detailed error information and return 2.
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jam Coreutils full documentation and source code is located at
+<https://github.com/BenJaminBrady/jamutils/>.

@@ -1,0 +1,21 @@
+.TH REBOOT 1 reboot
+.SH NAME
+reboot - hard reset the system if possible
+.SH SYNOPSIS
+.B reboot
+.SH DESCRIPTION
+Reboot the system if possible (the caller must have sufficient privileges in
+the form of having CAP_SYS_BOOT inside their user namespace).
+
+This is a Linux-specific system call and thus is only guaranteed
+to work if Linux is the currently running kernel.
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jam Coreutils full documentation and source code is located at
+<https://github.com/BenJaminBrady/jamutils/>.
