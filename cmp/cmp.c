@@ -42,7 +42,7 @@ main(int argc, char *argv[])
 	};
 	if (argc > 3) fseek(f, atol(argv[3]), SEEK_SET);
 	if (argc > 4) fseek(g, atol(argv[4]), SEEK_SET);
-	/* Current bug: this will almost surely trip up on binary files
+	/* FIXME: this will almost surely trip up on binary files
 	 * when it reads control characters or coincidental newlines */
 	for (;;) {
 		if (fgets(bufa, 8192, f) != NULL) {

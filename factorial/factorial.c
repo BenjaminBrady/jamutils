@@ -46,10 +46,10 @@ main(int argc, char *argv[])
 			continue;
 		};
 		if (z > big) {
-			printf("Limit exceeded!\n");
+			printf("Limits exceeded\n");
 			continue;
 		};
-		printf("%.16Lg\n", factorial(z, 1));
+		printf("%.16Lg\n", factorial(z, 1E0));
 	};
 	return 0;
 }
