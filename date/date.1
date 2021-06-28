@@ -1,11 +1,138 @@
 .TH DATE 1 date
 .SH NAME
-date - print the current time and date to stdout
+date - print or set the time and date
 .SH SYNOPSIS
 .B date
+.RI [ -u ]
+.RI [ +FORMAT ]
+.br
+.B date
+.RI [ -u ]
+.IR MMDDhhmm [[ CC ] YY ][ .ss ]
+.SH OPTIONS
+.TP
+.B \-u
+Treat the timezone as UTC (Coordinated Universal Time) as if the TZ environment
+variable was set to the string "UTC0", or its equivalent historical value of
+"GMT0".
 .SH DESCRIPTION
 Print the current time and date according to the system's local time in the
-format DD Mon YYYY (Day) HH:MM:SS, where the hour is in 24-hour format.
+specified FORMAT; otherwise, set the system time and date.
+
+The FORMAT text is printed verbatim, except for the following
+sequences which are replaced with their corresponding meaning:
+.TP
+%%
+a literal %
+.TP
+%a
+locale's abbreviated weekday name
+.TP
+%A
+locale's full weekday name
+.TP
+%b
+locale's abbreviated month name
+.TP
+%B
+locale's full month name
+.TP
+%c
+locale's full date and time representation
+.TP
+%C
+century
+.TP
+%d
+day of the month
+.TP
+%D
+date in the format %m/%d/%y
+.TP
+%e
+day of the month
+.TP
+%h
+a synonym for %b
+.TP
+%H
+hour (24-hour clock)
+.TP
+%I
+hour (12-hour clock)
+.TP
+%j
+day of the year
+.TP
+%m
+month
+.TP
+%M
+minute
+.TP
+%n
+a newline
+.TP
+%p
+locale's equivalent of either AM or PM
+.TP
+%r
+locale's 12-hour clock time
+.TP
+%S
+seconds
+.TP
+%t
+a tab
+.TP
+%T
+24-hour clock time; same as %H:%M:%S
+.TP
+%u
+day of week
+.TP
+%U
+week number, with Sunday as the first day of week
+.TP
+%V
+ISO week number, with Monday as the first day of the week. If the week
+containing the first of January has four or more days in the new year, then it
+is considered week one of that year; otherwise, it is considered the last week
+of the previous year, and the next week is considered to be week one.
+.TP
+%w
+day of week; but with 0 as Sunday
+.TP
+%W
+week number, with Monday determining the start of the week
+.TP
+%x
+locale's date representation
+.TP
+%X
+locale's time representation
+.TP
+%y
+year within the century
+.TP
+%Y
+year
+.TP
+%Z
+timezone name
+.TP
+Supplying no operands is equivalent to passing the following FORMAT:
+.PP
+.B
+%a %b %e %H:%M:%S %Z %Y
+.SH EXIT STATUS
+.TP
+.B 0
+The date was written successfully, or the system clock was modified without
+error.
+.TP
+.B 1
+An error occured while modifying the system clock.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT

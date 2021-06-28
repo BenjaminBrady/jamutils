@@ -2,8 +2,8 @@
 A set of core utilities written in the C99 standard.
 
 ## Abstract
-They are highly minimalist by virtue but flags will be added for
-functionality purposes as needed in future.
+They are a set of user space applications which aim to be POSIX compliant where
+defined.
 
 Included so far are: add, average, basename, cal, cat, cleanname, cmp, date,
 echo, factor, factorial, head, host, isprime, loop, ls, max, min, mkdir,
@@ -26,5 +26,5 @@ following to uninstall jamutils:
 ## License
 Copyright (C) 2021 Benjamin Brady under the terms of the GNU General Public
 License version 3 or (at your option) any later version. You should have
-received a copy of the GNU General Public License along with this program;
-see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+received a copy of the GNU General Public License along with this program; see
+the file COPYING. If not, see <https://www.gnu.org/licenses/>.
