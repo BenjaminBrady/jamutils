@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady
+ * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,10 +46,10 @@ main(int argc, char *argv[])
 			continue;
 		};
 		if (z > big) {
-			printf("Limit exceeded!\n");
+			printf("Limits exceeded\n");
 			continue;
 		};
-		printf("%.16Lg\n", factorial(z, 1));
+		printf("%.16Lg\n", factorial(z, 1E0));
 	};
 	return 0;
 }

@@ -2,7 +2,7 @@
  * 
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady
+ * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,42 +21,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void isprime(int p);
+void isprime(int *restrict p);
 
 int primes[] = {
 	7, 11, 13, 17, 19, 23, 29, 31,
 };
 
 void
-isprime(int p)
+isprime(int *restrict p)
 {
 	int l, i, j, k;
-	if (p < 2) goto notprime;
-	l = (int) sqrt(p);
-	if (p == 2 || p == 3 || p == 5) goto isprime;
-	if (p % 2 == 0 || p % 3 == 0 || p % 5 == 0) goto notprime;
+	if (*p < 2) goto notprime;
+	l = (int) sqrt(*p);
+	if (*p == 2 || *p == 3 || *p == 5) goto isprime;
+	if (*p % 2 == 0 || *p % 3 == 0 || *p % 5 == 0) goto notprime;
 	for (i = 0; i < l; i += 30) {
 		for (j = 0; j < 8; j++) {
 			k = primes[j];
 			if (k > l) break;
-			if (p % (i+k) == 0) goto notprime;
+			if (*p % (i+k) == 0) goto notprime;
 		};
 	};
 isprime:
-	printf("%d is a prime number\n", p);
+	printf("%d is a prime number\n", *p);
 	return;
 notprime:
-	printf("%d is not a prime number\n", p);
+	printf("%d is not a prime number\n", *p);
 }
 
 int
 main(int argc, char *argv[])
 {
-	int i;
+	int i, p;
+	double sup, t;
 	if (argc < 2) {
 		printf("Usage: isprime int (...)\n");
 		return 1;
 	};
-	for (i = 1; i < argc; i++) isprime(atoi(argv[i]));
+	sup = 9.007199254740992E15;
+	for (i = 1; i < argc; i++) {
+		t = atof(argv[i]);
+		if (t > sup) {
+			printf("Limits exceeded\n");
+		} else {
+			p = (int) t;
+			isprime(&p);
+		};
+	};
 	return 0;
 }
