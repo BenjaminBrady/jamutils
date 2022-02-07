@@ -63,7 +63,7 @@ main(int argc, char *argv[])
 	double sup, lb, ub, temp, v, k;
 	sup = 9.007199254740992E15;
 	if (argc < 2) {
-		printf("Usage: primes starting [ending]\n");
+		fputs("Usage: primes starting [ending]\n", stderr);
 		return 1;
 	};
 	lb = atof(argv[1]);
@@ -73,7 +73,7 @@ main(int argc, char *argv[])
 		if (ub < lb) return 0;
 		if (ub > sup) {
 limits:
-			printf("Limits exceeded\n");
+			fputs("Limits exceeded\n", stderr);
 			return 1;
 		};
 	};

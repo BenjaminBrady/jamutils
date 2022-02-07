@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,160 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
-int success = 0;
+#include "../arg.h"
+
+#define _(a) (a)
+
+void rm(const char *file);
+void rm_contents(const char *dir);
+int prompt(void);
+
+char *argv0;
+int fflg, iflg, rflg;
+int ret;
+
+void
+rm(const char *file)
+{
+	struct stat s;
+
+#ifdef CHECK_ACCESS
+	if (access(file, F_OK) < 0) {
+		if (!fflg) {
+			fprintf(stderr, "access %s: ", file);
+			perror(NULL);
+			ret = 2;
+		};
+		return;
+	};
+#endif
+	
+	if (lstat(file, &s) < 0) {
+		fprintf(stderr, "lstat %s: ", file);
+		perror(NULL);
+		ret = 2;
+		return;
+	};
+
+	if (S_ISDIR(s.st_mode)) {
+		if (!rflg) {
+			fprintf(stderr, "%s: ", file);
+			errno = EISDIR;
+			perror(NULL);
+			ret = 2;
+			return;
+		};
+
+		if ((!fflg) && (((access(file, W_OK) < 0) && isatty(0)) ||
+					(iflg))) {
+			fprintf(stderr, _("remove contents of \'%s\'? "),
+					file);
+			if (!(prompt())) return;
+		};
+
+		rm_contents(file);
+
+		if (iflg) {
+			fprintf(stderr, _("remove \'%s\'? "), file);
+			if (!(prompt())) return;
+		};
+
+		if (rmdir(file) < 0) {
+			fprintf(stderr, "rmdir %s: ", file);
+			perror(NULL);
+			ret = 2;
+		};
+	} else {
+		if ((!fflg) && (((access(file, W_OK) < 0) && isatty(0)) ||
+					(iflg))) {
+			fprintf(stderr, _("remove \'%s\'? "), file);
+			if (!(prompt())) return;
+		};
+
+		if (unlink(file) < 0) {
+			fprintf(stderr, "unlink %s: ", file);
+			perror(NULL);
+			ret = 2;
+		};
+	};
+}
+
+void
+rm_contents(const char *dir)
+{
+	int i, n;
+	struct dirent **dp;
+	char *name, dname[NAME_MAX];
+	size_t maxlen;
+
+	if ((n = scandir(dir, &dp, NULL, NULL)) < 0) {
+		fprintf(stderr, "scandir %s: ", dir);
+		return;
+	};
+
+	maxlen = strlen(dir)+1 + 1 + NAME_MAX+1; /* path + / + name */
+	if (!(name = malloc(maxlen))) {
+		perror("malloc");
+		return;
+	};
+
+	for (i = 0; i < n; i++) {
+		strncpy(dname, dp[i]->d_name, sizeof(dname));
+		free(dp[i]);
+		if (strcmp(dname, ".") == 0 || strcmp(dname, "..") == 0)
+			continue;
+		sprintf(name, "%s/%s", dir, dname);
+		rm(name);
+	};
+
+	free(dp);
+	free(name);
+}
+
+int
+prompt(void)
+{
+	/* TODO: add NLS */
+	int val;
+	int c = getchar();
+
+	val = (c == 'y' || c == 'Y');
+	while (c != '\n' && c != EOF) c = getchar();
+
+	return val;
+}
 
 int
 main(int argc, char *argv[])
 {
-	int i, fflag;
-	if (argc < 2) {
-		printf("Usage: rm file (...)\n");
+	ARGBEGIN{
+	case 'f': iflg = 0; fflg = 1; break;
+	case 'i': fflg = 0; iflg = 1; break;
+	case 'R': /* equivalent to -r */
+	case 'r': rflg = 1; break;
+	default:
+usage:
+		fprintf(stderr, "usage: %s [-fiRr] file...\n", argv0);
 		return 1;
+	}ARGEND;
+
+	if (argc == 0) {
+		if (fflg) {
+			return 0;
+		} else goto usage;
 	};
-	if (strncmp(argv[1], "-f", 2) == 0) {
-		fflag = 1;
-		argv++;
-		argc--;
-	} else fflag = 0;
-	if (fflag == 1) {
-		for (i = 1; i < argc; i++) remove(argv[i]);
-	} else {
-		for (i = 1; i < argc; i++) {
-			if (!(remove(argv[i]) == 0)) {
-				perror("Cannot remove file");
-				success = 1;
-			} else printf("removed '%s'\n", argv[i]);
-		};
-	};
-	return success;
+
+	for (; *argv; argv++) rm(*argv);
+
+	return ret;
 }

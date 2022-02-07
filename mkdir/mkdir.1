@@ -3,15 +3,42 @@
 mkdir - make a directory at the specified location
 .SH SYNOPSIS
 .B mkdir
-.IR DIRECTORY ...
+.RB [ \-p ]
+.RB [ \-m
+.IR mode ]
+.IR dir ...
 .SH DESCRIPTION
-Create directories at each specified location.
+Create the
+.IR dir ectories
+specified by the operands, in the given order.
+.SH OPTIONS
+.TP
+.BI \-m " mode
+Set the file permission mode of the created directories to
+.IR mode .
+The default is a=rwx - umask.
+.TP
+.B \-p
+Make all intermediate parent directories. Existing directories are ignored
+without error.
+.SH EXIT STATUS
+.TP
+.B 0
+All of the directories were created without error or, if the \-p flag was
+specified, all of the specified directories now exist.
+.TP
+.B 1
+The invocation of mkdir was invalid.
+.TP
+.B 2
+An error occured whilst creating one of the specified directories or
+intermediate parent directories.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

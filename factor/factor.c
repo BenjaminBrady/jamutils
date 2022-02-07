@@ -40,22 +40,22 @@ factor(double n)
 	if (n == 0) return;
 	s = sqrt(n) + 1;
 	while (modf(n/2, &rm) == 0) {
-		printf(" 2");
+		fputs(" 2", stdout);
 		n = rm;
 		s = sqrt(n) + 1;
 	};
 	while (modf(n/3, &rm) == 0) {
-		printf(" 3");
+		fputs(" 3", stdout);
 		n = rm;
 		s = sqrt(n) + 1;
 	};
 	while (modf(n/5, &rm) == 0) {
-		printf(" 5");
+		fputs(" 5", stdout);
 		n = rm;
 		s = sqrt(n) + 1;
 	};
 	while (modf(n/7, &rm) == 0) {
-		printf(" 7");
+		fputs(" 7", stdout);
 		n = rm;
 		s = sqrt(n) + 1;
 	};
@@ -68,7 +68,7 @@ factor(double n)
 		};
 	};
 	if (n > 1) printf(" %.0lf", n);
-	printf("\n");
+	putchar('\n');
 }
 
 int
@@ -76,13 +76,16 @@ main(int argc, char *argv[])
 {
 	int i;
 	double n;
+
 	if (argc < 2) {
-		printf("Usage: factor int (...)\n");
+		fputs("usage: factor int ...\n", stdout);
 		return 1;
 	};
+
 	for (i = 1; i < argc; i++) {
 		n = atof(argv[i]);
 		if (n > 0) factor(n);
 	};
+
 	return 0;
 }

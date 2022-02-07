@@ -1,10 +1,42 @@
 .TH ECHO 1 echo
 .SH NAME
-echo - put inputted text to stdout
+echo - print arguments to stdout.
 .SH SYNOPSIS
 .B echo
+.RI [ STRING ...]
 .SH DESCRIPTION
-Print all inputted arguments.
+Print given arguments to stdout, followed by a newline.
+.SH OPERANDS
+The following operands are supported:
+.TP
+\\a
+Print an alert
+.TP
+\\b
+Print a backspace
+.TP
+\\c
+Suppress the newline that otherwise follows the final argument in the output.
+All characters following the '\\c' in the arguments are ignored
+.TP
+\\f
+Print a form feed
+.TP
+\\n
+Print a newline
+.TP
+\\r
+Print a carriage return
+.TP
+\\t
+Print a vertical tab
+.TP
+\\\\
+Print a backslash
+.TP
+\\0num
+Print the 8 bit byte corresponding to the value of num. To this end, num may be
+zero to three digits long
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT

@@ -26,7 +26,7 @@ main(void)
 {
 	struct passwd *pw;
 	if (!(pw = getpwuid(geteuid()))) {
-		perror("Finding userid");
+		perror("getpwuid");
 		return 1;
 	};
 	printf("%s\n", pw->pw_name);

@@ -17,48 +17,62 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
-void makedir(char *path);
+#include "../arg.h"
 
-int success = 0;
-long p = 0777L;
-char *d;
-
-void
-makedir(char *path)
-{
-	char *d = strrchr(path, '/');
-	if (d != NULL) {
-		*d = 0;
-		makedir(path);
-		*d = '/';
-	};
-	if (mkdir(path, p) != 0) {
-		printf("An error occured while creating %s\n", path);
-		success = 1;
-	};
-}
+char *argv0;
+int ret;
+int pflg;
 
 int
 main(int argc, char *argv[])
 {
-	int i, mflag;
-	if (argc < 2) {
-		printf("Usage: mkdir dir (...)\n");
+	char *str, dirs[PATH_MAX];
+	mode_t mode, mask, pmode;
+
+	mask = umask(0);
+	mode = (S_IRWXU | S_IRWXG | S_IRWXO) & ~mask;
+	pmode = mode | S_IWUSR | S_IXUSR;
+
+	ARGBEGIN{
+	case 'p': pflg = 1; break;
+	/* TODO: extend mode handling to all chmod strings */
+	case 'm': if ((str = ARGF())) mode = strtol(str, NULL, 8); break;
+	default:
+		fprintf(stderr, "usage: %s [-p] [-m mode] dir...\n", argv0);
 		return 1;
+	}ARGEND;
+
+	for (; *argv; argv++) {
+		if (pflg) {
+			str = *argv;
+			strncpy(dirs, *argv, sizeof(dirs));
+			for (str = dirs + (dirs[0] == '/'); *str; str++) {
+				if (*str != '/') continue;
+				*str = '\0';
+				if ((mkdir(dirs, pmode) < 0) && (errno !=
+							EEXIST)) {
+					fprintf(stderr, "mkdir %s: ", dirs);
+					perror(NULL);
+					ret = 2;
+				};
+				*str = '/';
+			};
+		};
+		if (mkdir(*argv, mode) < 0) {
+			if ((errno == EEXIST) && pflg) continue;
+			fprintf(stderr, "mkdir %s: ", *argv);
+			perror(NULL);
+			ret = 2;
+		};
 	};
-	mflag = 0;
-	if (strncmp(argv[1], "-m", 2) == 0) {
-		p = atol(argv[2]);
-		mflag = 2;
-	};
-	for (i = 1+mflag; i < argc; i++) {
-		makedir(argv[i]);
-	};
-	return success;
+
+	return ret;
 }

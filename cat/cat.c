@@ -1,8 +1,8 @@
-/* cat: concatenate inputted files and print to stdout.
+/* cat: concatenate inputted files and write to stdout.
  * 
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,79 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
+#include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
-int
-main(int argc, char *argv[]) {
-	int i;
-	FILE *f;
-	char buf[8192];
-	if (argc < 2) {
-		printf("Usage: cat files (...)\n");
-		return 1;
-	};
-	for (i = 1; i < argc; i++) {
-		if (!(f = fopen(argv[i], "r"))) {
-			perror("Can't open file");
-		} else {
-			while ((fgets(buf, 8192, f)) != NULL)
-				printf("%s", buf);
-			fclose(f);
+#include "../arg.h"
+
+void print(int fd, const char *s);
+ssize_t writeall(const void *buf, size_t len);
+
+char *argv0;
+int ret;
+
+void
+print(int fd, const char *s)
+{
+	char buf[BUFSIZ];
+	ssize_t n;
+
+	while ((n = read(fd, buf, sizeof(buf))) > 0) {
+		if (writeall(buf, n) < 0) {
+			fprintf(stderr, "write %s: ", s);
+			perror(NULL);
+			return;
 		};
 	};
-	return 0;
+}
+
+ssize_t
+writeall(const void *buf, size_t len)
+{
+	ssize_t n;
+	const char *p = buf;
+
+	while (len) {
+		n = write(1, p, len);
+		if (n <= 0) return n;
+		p += n;
+		len -= n;
+	};
+
+	return p - (const char *)buf;
+}
+
+int
+main(int argc, char *argv[])
+{
+	int fd;
+
+	ARGBEGIN{
+	case 'u': break;
+	default:
+		fprintf(stderr, "usage: %s [-u] [file ...]\n", argv0);
+		return 1;
+	}ARGEND;
+
+	if (!argc) {
+		print(0, "<stdin>");
+	} else for (; *argv; argv++) {
+		if (!strcmp(*argv, "-")) {
+			print(0, "<stdin>");
+		} else {
+			if ((fd = open(*argv, O_RDONLY)) < 0) {
+				fprintf(stderr, "open %s: ", *argv);
+				perror(NULL);
+				ret = 2;
+			} else {
+				print(fd, *argv);
+				close(fd);
+			};
+		};
+	};
+
+	return ret;
 }

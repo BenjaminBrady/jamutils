@@ -1,4 +1,4 @@
-/* echo: put inputted text to stdout.
+/* echo: write arguments to stdout.
  * 
  * This file is part of Jam Coreutils.
  *
@@ -18,14 +18,35 @@
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../arg.h"
+
+char *argv0;
 
 int
 main(int argc, char *argv[])
 {
-	int i;
+	int i, l;
+	char *s = NULL, *p = NULL;
+
+	l = 1;
 	for (i = 1; i < argc; i++) {
-		printf("%s ", argv[i]);
+		l += strlen(argv[i])+1;
 	};
-	printf("\n");
+	if (!(s = malloc(l))) {
+		perror("malloc");
+		return 1;
+	};
+	p = s;
+
+	for (i = 1; i < argc; i++) {
+		strcpy(s, argv[i]);
+		s += strlen(s);
+		if (i != argc-1) *s++ = ' ';
+	};
+
+	puts(p);
 	return 0;
 }

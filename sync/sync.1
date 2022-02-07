@@ -1,21 +1,17 @@
-.TH CAT 1 cat
+.TH SYNC 1 sync
 .SH NAME
-cat - concatenate and print files
+sync - synchronise cached writes to file systems with persistent storage
 .SH SYNOPSIS
-.B cat
-.RB [ \-u ]
-.RI [ file ...]
+.B sync
 .SH DESCRIPTION
-Concatenate and write all inputted files to stdout in the order given.
-.SH OPTIONS
-.TP
-.B \-u
-Write bytes from the input file to stdout immediately as read. This
-is the default behaviour.
+Update persistent storage with all information in memory which modifies file
+systems.
+.SH EXIT STATUS
+The exit status is always 0.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+Copyright \(co 2021-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
 later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
 to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.

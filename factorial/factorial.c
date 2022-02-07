@@ -1,4 +1,4 @@
-/* factorial: print the factorial of the inputed integers.
+/* factorial: print the factorial of each argument.
  *
  * This file is part of Jam Coreutils.
  *
@@ -27,8 +27,7 @@ int big = 1754;
 long double
 factorial(long double z, long double w)
 {
-	if (z == 0) return w;
-	return factorial(z-1, z*w);
+	return (z == 0) ? w : factorial(z-1, z*w);
 }
 
 int
@@ -36,17 +35,17 @@ main(int argc, char *argv[])
 {
 	int i, z;
 	if (argc < 2) {
-		printf("Usage factorial int (...)\n");
+		fputs("Usage: factorial int (...)\n", stderr);
 		return 1;
 	};
 	for (i = 1; i < argc; i++) {
 		z = atoi(argv[i]);
 		if (z < 0) {
-			printf("Divergent\n");
+			fputs("Divergent\n", stdout);
 			continue;
 		};
 		if (z > big) {
-			printf("Limits exceeded\n");
+			fputs("Limits exceeded\n", stdout);
 			continue;
 		};
 		printf("%.16Lg\n", factorial(z, 1E0));

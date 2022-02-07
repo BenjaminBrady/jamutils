@@ -1,0 +1,52 @@
+.TH STRINGS 1 strings
+.SH NAME
+strings \- write all of the printable strings in the specified files
+.SH SYNOPSIS
+.B strings
+.RB [ \-a ]
+.RB [ \-t
+.IR format ]
+.RB [ \-n
+.IR number ]
+.RI [ file ...]
+.SH DESCRIPTION
+Look for all of the printable strings in the specified files and write those
+strings to stdout.
+
+A printable string is defined as any sequence of four (by default) or more
+consecutive printable characters.
+.SH OPTIONS
+.TP
+.B \-a
+Scan each 
+.I file
+entirely. This is the default behaviour.
+.TP
+.BI \-t " format
+Write the byte offset before each string in the given
+.IR format .
+The formats are:
+.TP
+\td
+decimal
+.TP
+\to
+octal
+.TP
+\tx
+hexadecimal
+.TP
+.B \-n " number
+Print strings of
+.I number
+or more consecutive printable characters.
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jam Coreutils full documentation and source code is located at
+<git://benjaminbrady.ie/jamutils.git/>.

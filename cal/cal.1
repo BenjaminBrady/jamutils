@@ -3,20 +3,24 @@
 cal - print a calendar
 .SH SYNOPSIS
 .B cal
-.RI [ MONTH ]
-.RI [ YEAR ]
+.RI [[ month ]
+.IR year ]
 .SH DESCRIPTION
-Print a calender of the specified month and year.
-Take the current month and year if none are provided.
+Print a calendar of the specified month and year between January 1
+and December 9999.
 
-The accepted range for the month is 1-12 (January to February)
-and the accepted range for the year is 0-99999.
+The Julian calendar is used until 2 September 1752 and the Gregorian calendar
+is used thereafter.
+.SH BUGS
+POSIX specifies that if only a year is given, cal should produce a calendar for
+all twelve months. Currently; however, cal only prints the current month in the
+specified year.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

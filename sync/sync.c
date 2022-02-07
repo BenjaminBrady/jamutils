@@ -1,8 +1,8 @@
-/* reboot: hard reset the system if possible.
+/* sync: synchronise cached writes to file systems with persistent storage.
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021 Benjamin Brady
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,10 @@
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
 #include <unistd.h>
-#include <sys/reboot.h>
 
 int
 main(void)
 {
 	sync();
-	return reboot(0x01234567);
+	return 0;
 }

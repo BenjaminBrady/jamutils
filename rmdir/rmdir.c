@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,55 +17,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
-#include <fts.h>
+#include <libgen.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <unistd.h>
+
+#include "../arg.h"
+
+char *argv0;
+int pflg;
 
 int
 main(int argc, char *argv[])
 {
-	int i, r;
-	FTS *ftsp = NULL;
-	FTSENT *curr = NULL;
-	char *files[2] = {
-		NULL, NULL,
-	};
-	if (argc < 2) {
-		printf("Usage: rmdir dir (...)\n");
+	int err = 0;
+	char *dir;
+
+	ARGBEGIN{
+	case 'p': pflg = 1; break;
+	default:
+		fprintf(stderr, "usage: %s [-p] dir...\n", argv0);
 		return 1;
-	};
-	r = 0;
-	for (i = 1; i < argc; i++) {
-		files[0] = argv[i];
-		ftsp = fts_open(files,
-				FTS_NOCHDIR | FTS_PHYSICAL | FTS_XDEV, NULL);
-		if (ftsp) {
-			while ((curr = fts_read(ftsp))) {
-				if ((curr->fts_info == FTS_ERR) |
-				    (curr->fts_info == FTS_DNR) |
-				    (curr->fts_info == FTS_NS)) {
-					r = 2;
-					perror("fts_read error");
-				} else if ((curr->fts_info == FTS_DEFAULT) |
-					   (curr->fts_info == FTS_DP)      |
-					   (curr->fts_info == FTS_F)       |
-					   (curr->fts_info == FTS_SL)      |
-					   (curr->fts_info == FTS_SLNONE)) {
-					if (remove(curr->fts_accpath) < 0) {
-						r = 2;
-						perror("remove error");
-					};
-				};
+	}ARGEND;
+
+	for (; *argv; argv++) {
+		if (rmdir(*argv) < 0) {
+			fprintf(stderr, "rmdir %s: ", *argv);
+			perror(NULL);
+			err = 2;
+		} else if (pflg) for (dir = dirname(*argv); strcmp(dir, "/") &&
+				strcmp(dir, "."); dir = dirname(dir)) {
+			if (rmdir(dir) < 0) {
+				fprintf(stderr, "rmdir %s: ", dir);
+				perror(NULL);
+				err = 2;
+				break;
 			};
-			curr = NULL;
-		} else {
-			r = 2;
-			perror("fts_open error");
 		};
-		if (ftsp) fts_close(ftsp);
-		ftsp = NULL;
 	};
-	return r;
+
+	return err;
 }

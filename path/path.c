@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,72 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#ifdef CHECK_ACCESS
+	#include <unistd.h>
+#endif
 
-char *realpath(const char *restrict path, char *restrict resolved_path);
+#include "../arg.h"
+
+char *argv0;
+int eflg;
+int qflg;
+int sflg;
 
 int
 main(int argc, char *argv[])
 {
-	int i;
-	if (argc < 2) {
-		printf("Usage: path file (...)\n");
+	char *path, *n;
+	int ret = 0;
+	FILE *stream = stderr;
+
+	ARGBEGIN{
+	case 'e': eflg = 1; break;
+	case 'n': eflg = 0; break;
+	case 'q': qflg = 1; break;
+	case 's':
+		if ((n = ARGF())) {
+			switch (n[0]) {
+			case 'o':
+				sflg = 1;
+				stream = stdout;
+				break;
+			case 'e':
+				sflg = 1;
+				stream = stderr;
+			};
+		};
+		break;
+	default:
+		fprintf(stderr, "usage: %s [-enq] [-s stream] file...\n",
+				argv0);
 		return 1;
+	}ARGEND;
+
+	for (; *argv; argv++) {
+#ifdef CHECK_ACCESS
+		if (access(*argv, F_OK) < 0) {
+			fprintf(stderr, "access %s: ", *argv);
+			perror(NULL);
+			ret = 2;
+			continue;
+		};
+#endif
+		path = realpath(*argv, NULL);
+		if (path != NULL) {
+			if (!qflg) fprintf(stream, "%s: ", *argv);
+			if (eflg) {
+				fputs(path, stdout);
+				putchar('\0');
+			} else puts(path);
+			free(path);
+		} else {
+			fprintf(stderr, "realpath %s: ", *argv);
+			perror(NULL);
+			ret = 2;
+		};
 	};
-	for (i = 1; i < argc; i++) {
-		if (access(argv[i], F_OK) == 0) {
-			printf("%s\n", realpath(argv[i], NULL));
-		} else perror("Error accessing file");
-	};
-	return 0;
+
+	return ret;
 }

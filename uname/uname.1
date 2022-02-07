@@ -3,10 +3,35 @@
 uname - print system information
 .SH SYNOPSIS
 .B uname
+.RI [ -amnrsv ]
+.SH OPTIONS
+.TP
+.B \-a
+Print all information in the following order:
+.TP
+.B \-s
+Print the name of the operating system
+.TP
+.B \-n
+Print the hostname of this node on the network
+.TP
+.B \-r
+Print the currently running release of the operating system
+.TP
+.B \-v
+Print the currently running version of the operating system
+.TP
+.B \-m
+Print the hardware type of the machine
 .SH DESCRIPTION
-Print the system information. The information printed is:
-operating system name, hostname (node name), operating system release,
-operating system version, and the hardware identifier for the machine.
+Print system information as requested by the given flags.
+
+If no flags are passed then the output will be equivalent to running:
+.B
+uname \-s
+.PP
+Note that on GNU/Linux, the \-s, \-r, and \-v flags refer to the kernel's name,
+release, and version respectively instead of the operating system.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT

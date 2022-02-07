@@ -19,35 +19,26 @@
  * <https://www.gnu.org/licenses/>. */
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
+
+#include "../arg.h"
+
+char *argv0;
+int hflg;
 
 int
 main(int argc, char *argv[])
 {
-	int i, l, cflag;
-	srand(time(0));
-	l = 1;
-	switch (argc) {
-	case 1:
-		l = 1;
-		break;
-	case 2:
-		if (strncmp(argv[1], "-c", 2) == 0) {
-			printf("Returns random numbers in [0,%d]\n",
-					RAND_MAX);
-			l = 1;
-		} else l = atoi(argv[1]);
-		break;
+	int i;
+	ARGBEGIN{
+	case 'h':	hflg = 1; break;
 	default:
-		cflag = 0;
-		if (strncmp(argv[1], "-c", 2) == 0) {
-			printf("Returns random numbers in [0,%d]\n",
-					RAND_MAX);
-			cflag = 1;
-		};
-		l = atoi(argv[1+cflag]);
-	};
-	for (i = 0; i < l; i++) printf("%d\n", rand());
+			fputs("Usage: random [-h] [int]\n", stderr);
+			return 1;
+	}ARGEND;
+	srand(time(0));
+	if (hflg) printf("Returns random numbers in [0,%d]\n", RAND_MAX);
+	argc ? (i = atoi(argv[0])) : (i = 1);
+	while (i--) printf("%d\n", rand());
 	return 0;
 }

@@ -1,0 +1,59 @@
+.TH TIME 1 time
+.SH NAME
+time - time a simple command
+.SH SYNOPSIS
+.B time
+[-p]
+.IR utility
+.RI [ argument... ]
+.SH DESCRIPTION
+Invoke the named
+.I utility
+with the arguments supplied in
+.I argument...
+and print timing statistics to stderr.
+.SH OPTIONS
+.TP
+.B \-p
+Print the timing statistics in the POSIX format: "real %f\enuser %f\esys
+%f\en". This is also the default.
+.SH EXIT STATUS
+If
+.I utility
+is successfully invoked, the exit status of
+.B time
+is the exit status of
+.IR utility ;
+otherwise, the exit value is of one of the following forms:
+.TP
+.B 1
+Incorrect usage.
+.TP
+.B 2
+An error occurred with
+.BR time .
+Error information is printed to stderr.
+.TP
+.B 126
+.I utility
+was found, but could not be invoked.
+.TP
+.B 127
+.I utility
+could not be found.
+.SH EXAMPLES
+In the event that time is applied to pipelines or lists of commands, the
+behaviour is unspecified. The following command can be used to apply time to a
+command of arbitrary complexity:
+.TP
+.B time sh \-c 'command'
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jam Coreutils full documentation and source code is located at
+<git://benjaminbrady.ie/jamutils.git/>.

@@ -1,5 +1,5 @@
 /* isprime: determine whether or not each argument is a prime number.
- * 
+ *
  * This file is part of Jam Coreutils.
  *
  * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
@@ -21,51 +21,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void isprime(int *restrict p);
+void isprime(double p);
 
 int primes[] = {
 	7, 11, 13, 17, 19, 23, 29, 31,
 };
 
 void
-isprime(int *restrict p)
+isprime(double p)
 {
-	int l, i, j, k;
-	if (*p < 2) goto notprime;
-	l = (int) sqrt(*p);
-	if (*p == 2 || *p == 3 || *p == 5) goto isprime;
-	if (*p % 2 == 0 || *p % 3 == 0 || *p % 5 == 0) goto notprime;
+	size_t i, j, k;
+	unsigned long long l, r;
+	
+	l = (unsigned long long) sqrt(p);
+	r = (unsigned long long) p;
+	if (p < 2) goto notprime;
+	if (r == 2 || r == 3 || r == 5) goto isprime;
+	if (r % 2 == 0 || r % 3 == 0 || r % 5 == 0) goto notprime;
+
 	for (i = 0; i < l; i += 30) {
 		for (j = 0; j < 8; j++) {
-			k = primes[j];
+			k = primes[j] + i;
 			if (k > l) break;
-			if (*p % (i+k) == 0) goto notprime;
+			if (r % k == 0) goto notprime;
 		};
 	};
 isprime:
-	printf("%d is a prime number\n", *p);
+	printf("%.0lf is a prime number\n", p);
 	return;
 notprime:
-	printf("%d is not a prime number\n", *p);
+	printf("%.0lf is not a prime number\n", p);
 }
 
 int
 main(int argc, char *argv[])
 {
-	int i, p;
-	double sup, t;
+	int i;
+	double t, sup = 9.007199254740992E15; /* max integer-accurate double */
+
 	if (argc < 2) {
-		printf("Usage: isprime int (...)\n");
+		fputs("usage: isprime int ...\n", stderr);
 		return 1;
 	};
-	sup = 9.007199254740992E15;
+
 	for (i = 1; i < argc; i++) {
 		t = atof(argv[i]);
-		if (t > sup) {
-			printf("Limits exceeded\n");
+		if (t >= sup || t <= -sup) {
+			fputs("Limits exceeded\n", stdout);
 		} else {
-			p = (int) t;
-			isprime(&p);
+			isprime(t);
 		};
 	};
 	return 0;

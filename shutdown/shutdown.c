@@ -23,5 +23,6 @@
 int
 main(void)
 {
+	sync();
 	return reboot(0x4321fedc);
 }

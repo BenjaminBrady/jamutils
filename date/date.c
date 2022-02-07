@@ -83,8 +83,10 @@ invalid:
 		default:
 			strptime(date, "%m%d%k%M%C%y.%S", n);
 		};
-		tp.tv_sec = mktime(n);
-		tp.tv_nsec = 0L;
+		tp = (struct timespec) {
+			.tv_sec = mktime(n),
+			.tv_nsec = 0L,
+		};
 		if (clock_settime(CLOCK_REALTIME, &tp) != 0) {
 			perror("clock_settime");
 			return 1;

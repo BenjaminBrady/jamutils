@@ -1,0 +1,42 @@
+.TH MTIME 1 mtime
+.SH NAME
+mtime \- print last modification time of specified files.
+.SH SYNOPSIS
+.B mtime
+.RI [ -aAclm ]
+.R FILES...
+.SH DESCRIPTION
+Print the name and various timestamps for each of the files.
+
+The timestamps are given in seconds since the Epoch.
+
+If no timestamps are specified, then mtime will print the last data
+modification timestamp by default (as if 
+.B \-m
+was specified).
+.SH OPTIONS
+.TP
+.B \-l
+Print each timestamp to nanosecond accuracy.
+.TP
+.B \-A
+Print all information in the following order:
+.TP
+.B \-a
+Print the last data access timestamp for each file.
+.TP
+.B \-m
+Print the last data modification timestamp for each file.
+.TP
+.B \-c
+Print the last file status change timestamp for each file.
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jam Coreutils full documentation and source code is located at
+<git://benjaminbrady.ie/jamutils.git/>.

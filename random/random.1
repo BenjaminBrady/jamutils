@@ -1,26 +1,25 @@
 .TH RANDOM 1 random
 .SH NAME
-random - print the output of a pseudo random number generator
+random - print the output of a pseudo random number generator.
 .SH SYNOPSIS
 .B random
-.RB [ \-c ]
+.RB [ \-h ]
 .RI [ INTEGER ]
 .SH OPTIONS
 .TP
-.B \-c
-Print the codomain of the pseudo random number generator.
+.B \-h
+Print the codomain of the pseudo random number generator
 .TP
 .B INTEGER
-How many numbers to print (1 by default).
+How many numbers to print (one by default)
 .SH DESCRIPTION
 Print the output of the POSIX stdlib pseudo random number generator with the
 srand seed given by the current Unix Epoch time.
 
-The amount of random numbers printed is the inputted integer. If none is given
-then the default is 1.
+The amount of numbers to print is the argument INTEGER. The default is one.
 
-The range is [0, RAND_MAX] inclusive where RAND_MAX is a system specific
-constant.
+The codomain of the pseudo random number generator is [0, RAND_MAX] inclusive
+there RAND_MAX is a system specific constant.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT

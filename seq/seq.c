@@ -49,10 +49,10 @@ main(int argc, char *argv[])
 	};
 	if (s <= e) {
 		if (c < 0) return 0;
-		for (i = s; i <= e; i += c) printf("%.16g\n", i);
+		for (i = s; i <= e; i += c) printf("%.16G\n", i);
 	} else {
 		if (c > 0) return 0;
-		for (i = s; i >= e; i += c) printf("%.16g\n", i);
+		for (i = s; i >= e; i += c) printf("%.16G\n", i);
 	};
 	return 0;
 }

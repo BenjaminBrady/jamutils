@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,24 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-char *realpath(const char *restrict path, char *restrict resolved_path);
-
 int
 main(void)
 {
-	char *d;
-	d = realpath(".", NULL);
-	d = strrchr(d, '/');
-	if (d != NULL) {
-		d++;
-		if (strncmp(d, "", 1) == 0) d = "/";
-		printf("%s\n", d);
+	char *wd, *p;
+
+	wd = realpath(".", NULL);
+	p = strrchr(wd, '/') + 1;
+	if (p != NULL) {
+		free(wd);
+		if (strncmp(p, "", 1) == 0) p = "/";
+		puts(p);
 		return 0;
 	};
+	perror("realpath");
 	return 1;
 }

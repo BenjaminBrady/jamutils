@@ -1,18 +1,40 @@
 .TH RM 1 rm
 .SH NAME
-rm - remove the specified files
+rm - remove directory entries.
 .SH SYNOPSIS
 .B rm
-.IR FILE ...
+.RB [ \-fiRr ]
+.IR file ...
 .SH DESCRIPTION
-Remove the inputted files if possible. Return 1
-and print error information if an error occurs.
+Remove the specified directory entries, if possible.
+.SH OPTIONS
+.TP
+.B \-f
+Do not prompt for confirmation. Ignore nonexistent directory entries without
+error. Ignore previous occurrences of \-i.
+.TP
+.B \-i
+Prompt for confirmation before every removal.
+.TP
+.BR \-r ", " \-R
+Remove directories recursively.
+.SH EXIT STATUS
+.TP
+.B 0
+Each directory entry was successfully removed, unless its removal was cancelled
+by a non-affirmative response to a prompt for confirmation.
+.TP
+.B 1
+The invocation of rm was invalid.
+.TP
+.B 2
+An error occurred whilst removing a stipulated directory entry.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at
