@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,25 +23,31 @@
 #include <string.h>
 #include <sys/types.h>
 
+#include "arg.h"
+
 void printdir(char *p);
 
-int success = 0;
-int aflag = 0;
+int success;
+int aflag;
+char *argv0;
 
 inline void
 printdir(char *p)
 {
 	int i, n;
 	struct dirent **f;
-	if ((n = scandir(p, &f, NULL, alphasort)) == -1) {
-		perror("Error scanning directory");
+
+	if ((n = scandir(p, &f, NULL, alphasort)) < 0) {
+		fprintf(stderr, "scandir %s: ", p);
+		perror(NULL);
 		success = 1;
 		return;
 	};
+
 	for (i = 0; i < n; i++) {
 		if (f[i]->d_type == DT_DIR) {
 			if (aflag || ((f[i]->d_name)[0] != '.')) {
-				printf("%s\n", f[i]->d_name);
+				puts(f[i]->d_name);
 				free(f[i]);
 			};
 		};
@@ -49,11 +55,12 @@ printdir(char *p)
 	for (i = 0; i < n; i++) {
 		if (f[i]->d_type != DT_DIR) {
 			if (aflag || ((f[i]->d_name)[0] != '.')) {
-				printf("%s\n", f[i]->d_name);
+				puts(f[i]->d_name);
 				free(f[i]);
 			};
 		};
 	};
+
 	free(f);
 }
 
@@ -61,32 +68,22 @@ int
 main(int argc, char *argv[])
 {
 	int i;
-	char *p;
-	switch (argc) {
-	case 1:
-		printdir(".");
-		break;
-	case 2:
-		if (!(strncmp(argv[1], "-a", 2))) {
-			aflag = 1;
-			printdir(".");
-		} else {
-			printdir(argv[1]);
-		};
-		break;
+
+	ARGBEGIN{
+	case 'a': aflag = 1; break;
 	default:
-		if (!(strncmp(argv[1], "-a", 2))) aflag = 1;
-		p = argv[1+aflag];
-		if (aflag) {
-			if (argc > 3) printf("%s:\n", p);
-		} else printf("%s:\n", p);
-		printdir(p);
-		for (i = 2+aflag; i < argc; i++) {
-			printf("\n");
-			p = argv[i];
-			printf("%s:\n", p);
-			printdir(p);
+		fprintf(stderr, "usage: %s [-a]\n", argv0);
+		return 1;
+	}ARGEND;
+
+	if (!argc) {
+		printdir(".");
+	} else {
+		for (i = 0; i < argc; i++) {
+			printf("%s:\n", argv[i]);
+			printdir(argv[i]);
 		};
 	};
+
 	return success;
 }

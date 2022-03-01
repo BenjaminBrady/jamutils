@@ -118,17 +118,17 @@ main(int argc, char *argv[])
 	default:
 usage:
 		fprintf(stderr,
-			"usage: %s [-a] [-t format] [-n number] [file ...]\n",
+			"usage: %s [-a] [-t format] [-n number] [file...]\n",
 			argv0);
 		return 1;
 	}ARGEND;
 	if (minchars < 1) minchars = 1;
 
 	if (!argc) {
-		extstr(0);
+		extstr(STDIN_FILENO);
 	} else for (; *argv; argv++) {
 		if (!strcmp(*argv, "-")) {
-			extstr(0);
+			extstr(STDIN_FILENO);
 		} else {
 			if ((fd = open(*argv, O_RDONLY)) < 0) {
 				fprintf(stderr, "open %s: ", *argv);

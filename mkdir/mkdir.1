@@ -1,6 +1,6 @@
 .TH MKDIR 1 mkdir
 .SH NAME
-mkdir - make a directory at the specified location
+mkdir \- make a directory at the specified location
 .SH SYNOPSIS
 .B mkdir
 .RB [ \-p ]
@@ -16,7 +16,7 @@ specified by the operands, in the given order.
 .BI \-m " mode
 Set the file permission mode of the created directories to
 .IR mode .
-The default is a=rwx - umask.
+The default is a=rwx \- umask.
 .TP
 .B \-p
 Make all intermediate parent directories. Existing directories are ignored
@@ -28,7 +28,9 @@ All of the directories were created without error or, if the \-p flag was
 specified, all of the specified directories now exist.
 .TP
 .B 1
-The invocation of mkdir was invalid.
+The invocation of
+.B mkdir
+was invalid.
 .TP
 .B 2
 An error occured whilst creating one of the specified directories or
@@ -36,7 +38,7 @@ intermediate parent directories.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
 later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
 to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.

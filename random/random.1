@@ -1,31 +1,40 @@
 .TH RANDOM 1 random
 .SH NAME
-random - print the output of a pseudo random number generator.
+random \- print the output of a pseudorandom number generator.
 .SH SYNOPSIS
 .B random
 .RB [ \-h ]
-.RI [ INTEGER ]
+.RI [ int ]
 .SH OPTIONS
 .TP
 .B \-h
-Print the codomain of the pseudo random number generator
+Print the codomain of the pseudorandom number generator.
 .TP
-.B INTEGER
-How many numbers to print (one by default)
+.I int
+Generate and print
+.I int
+numbers. The default is one.
 .SH DESCRIPTION
-Print the output of the POSIX stdlib pseudo random number generator with the
-srand seed given by the current Unix Epoch time.
+Print the output of the POSIX stdlib.h pseudorandom number generator function
+rand() with the current Unix Epoch time as the srand() seed.
 
-The amount of numbers to print is the argument INTEGER. The default is one.
+The codomain of the pseudorandom number generator is [0, RAND_MAX], inclusive,
+where RAND_MAX is a system specific constant defined in the stdlib.h system
+header. It is guaranteed to be at least 32767.
+.SH EXTENDED DESCRIPTION
+Note that the rand() function is deterministic, hence if
+.B random
+is invoked multiple times before the system clock increments, then the outputs
+will be identical.
 
-The codomain of the pseudo random number generator is [0, RAND_MAX] inclusive
-there RAND_MAX is a system specific constant.
+Additionally, note that the rand() function is not (in general) a CSPRNG;
+therefore, the output should never be used for cryptographic applications.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

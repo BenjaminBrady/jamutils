@@ -1,19 +1,21 @@
 .TH SHUTDOWN 1 shutdown
 .SH NAME
-shutdown - stop the system and switch the power off if possible
+shutdown \- stop and power off a Linux system.
 .SH SYNOPSIS
 .B shutdown
 .SH DESCRIPTION
-Shutdown the system if possible (the caller must have sufficient privileges in the form of having CAP_SYS_BOOT inside their user namespace).
+Call the system shutdown function of the Linux kernel.
 
-This is a Linux-specific system call and thus is only guaranteed
-to work if Linux is the currently running kernel.
+Linux must be the currently running kernel and the user must have sufficient
+privileges in the form of having CAP_SYS_BOOT inside their user namespace for
+.B shutdown
+to function correctly.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

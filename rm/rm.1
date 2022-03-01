@@ -1,20 +1,27 @@
 .TH RM 1 rm
 .SH NAME
-rm - remove directory entries.
+rm \- remove directory entries.
 .SH SYNOPSIS
 .B rm
 .RB [ \-fiRr ]
 .IR file ...
 .SH DESCRIPTION
 Remove the specified directory entries, if possible.
+.SH EXTENDED DESCRIPTION
+For absolute clarity, the potentially ambiguous term
+.I file
+is replaced with the unambiguous term 'directory entry' throughout this
+document. The term 'directory' refers specifically to directories.
 .SH OPTIONS
 .TP
 .B \-f
 Do not prompt for confirmation. Ignore nonexistent directory entries without
-error. Ignore previous occurrences of \-i.
+error. Ignore previous occurrences of
+.BR \-i .
 .TP
 .B \-i
-Prompt for confirmation before every removal.
+Prompt for confirmation before every removal. Ignore previous occurrences of
+.BR \-f .
 .TP
 .BR \-r ", " \-R
 Remove directories recursively.
@@ -25,14 +32,16 @@ Each directory entry was successfully removed, unless its removal was cancelled
 by a non-affirmative response to a prompt for confirmation.
 .TP
 .B 1
-The invocation of rm was invalid.
+The invocation of
+.B rm
+was invalid.
 .TP
 .B 2
 An error occurred whilst removing a stipulated directory entry.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
 later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
 to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.

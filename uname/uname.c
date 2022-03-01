@@ -36,10 +36,11 @@ int
 main(int argc, char *argv[])
 {
 	struct utsname n;
+
 	uname(&n);
 
 	ARGBEGIN{
-	case 'a': flgs = (1 << 5) - 1;    break;
+	case 'a': flgs = (1 << 6) - 1;    break;
 	case 'm': flgs |= print_machine;  break;
 	case 'n': flgs |= print_nodename; break;
 	case 'r': flgs |= print_release;  break;
@@ -74,9 +75,11 @@ main(int argc, char *argv[])
 		fputs(n.machine, stdout);
 		prntd = 1;
 	};
-	if (flgs == ((1<<5)-1)) printf(" %s", os);
 
+	if (flgs == ((1 << 6) - 1)) printf(" %s", os);
 	if (!prntd) fputs(n.sysname, stdout);
+
 	putchar('\n');
+
 	return 0;
 }

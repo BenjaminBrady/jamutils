@@ -1,0 +1,31 @@
+.TH TTY 1 tty
+.SH NAME
+tty \- return the name of the terminal connected to standard input.
+.SH SYNOPSIS
+.B tty
+.SH DESCRIPTION
+If standard input is a terminal device, print the name of the terminal.
+
+If standard input is not a terminal device, print an error message instead.
+.SH EXIT STATUS
+.TP
+0
+Standard input is a terminal.
+.TP
+1
+Standard input is not a terminal.
+.TP
+2
+The invocation of
+.B tty
+was invalid.
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jam Coreutils full documentation and source code is located at
+<git://benjaminbrady.ie/jamutils.git/>.

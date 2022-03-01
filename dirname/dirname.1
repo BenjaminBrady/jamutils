@@ -1,0 +1,35 @@
+.TH DIRNAME 1 dirname
+.SH NAME
+dirname \- return the directory portion of a pathname
+.SH SYNOPSIS
+.B dirname
+.I string
+.SH DESCRIPTION
+Treat the
+.I string
+operand as an XBD pathname and print the path prefix.
+.SH EXIT STATUS
+.TP
+.B 0
+The invocation of
+.B dirname
+was correct.
+.TP
+.B 1
+The invocation of
+.B dirname
+was incorrect.
+.SH EXTENSIONS
+.TP
+.B MULTIPLE_DIRECTORIES
+Recurse over each supplied operand, instead of the first operand exclusively.
+.SH AUTHOR
+Written by Benjamin Brady.
+.SH COPYRIGHT
+Copyright \(co 2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
+<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
+change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH SEE ALSO
+Jamutils full documentation and source code is located at
+<git://benjaminbrady.ie/jamutils.git/>.

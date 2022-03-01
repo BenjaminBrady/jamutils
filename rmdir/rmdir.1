@@ -1,21 +1,36 @@
 .TH RMDIR 1 rmdir
 .SH NAME
-rmdir - remove the specified directories
+rmdir \- remove the specified directories
 .SH SYNOPSIS
-.B rm
-.IR DIRECTORY ...
+.B rmdir
+.RB [ \-p ]
+.IR directory ...
 .SH DESCRIPTION
-Remove the inputted directories if possible.
-
-Return 1 if no directories are supplied.
-If any error is encountered while deleting any file
-then print detailed error information and return 2.
+Remove the specified directories in the order given, if possible.
+.SH OPTIONS
+.TP
+.B \-p
+Remove all directories which appear in the pathname.
+.SH EXIT STATUS
+.TP
+.B 0
+Every specified
+.I directory
+was successfully removed.
+.TP
+.B 1
+The invocation of
+.B rmdir
+was incorrect.
+.TP
+.B 2
+An error occurred whilst removing a stipulated directory.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

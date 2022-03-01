@@ -56,10 +56,12 @@ rm(const char *file)
 #endif
 	
 	if (lstat(file, &s) < 0) {
-		fprintf(stderr, "lstat %s: ", file);
-		perror(NULL);
-		ret = 2;
-		return;
+		if (!fflg) {
+			fprintf(stderr, "lstat %s: ", file);
+			perror(NULL);
+			ret = 2;
+			return;
+		};
 	};
 
 	if (S_ISDIR(s.st_mode)) {
@@ -86,9 +88,11 @@ rm(const char *file)
 		};
 
 		if (rmdir(file) < 0) {
-			fprintf(stderr, "rmdir %s: ", file);
-			perror(NULL);
-			ret = 2;
+			if (!fflg) {
+				fprintf(stderr, "rmdir %s: ", file);
+				perror(NULL);
+				ret = 2;
+			};
 		};
 	} else {
 		if ((!fflg) && (((access(file, W_OK) < 0) && isatty(0)) ||
@@ -98,9 +102,11 @@ rm(const char *file)
 		};
 
 		if (unlink(file) < 0) {
-			fprintf(stderr, "unlink %s: ", file);
-			perror(NULL);
-			ret = 2;
+			if (!fflg) {
+				fprintf(stderr, "unlink %s: ", file);
+				perror(NULL);
+				ret = 2;
+			};
 		};
 	};
 }
@@ -118,7 +124,7 @@ rm_contents(const char *dir)
 		return;
 	};
 
-	maxlen = strlen(dir)+1 + 1 + NAME_MAX+1; /* path + / + name */
+	maxlen = strlen(dir) + 1 + NAME_MAX+1; /* path + / + name */
 	if (!(name = malloc(maxlen))) {
 		perror("malloc");
 		return;

@@ -1,8 +1,8 @@
-/* factor: print the prime factorisation of inputted integers.
+/* factor: print the prime factorisation of each input.
  * 
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../arg.h"
+
 void factor(double n);
+
+char *argv0;
 
 double wheel[] = {
 	2,10, 2, 4, 2, 4, 6, 2, 6, 4,
@@ -36,8 +40,18 @@ factor(double n)
 {
 	int i;
 	double rm, d, s;
+
 	printf("%.0lf:", n);
-	if (n == 0) return;
+
+	if (n <= 0) {
+		if (n == 0) {
+			puts(" 0");
+			return;
+		};
+		fputs(" -1", stdout);
+		n *= -1E0;
+	};
+
 	s = sqrt(n) + 1;
 	while (modf(n/2, &rm) == 0) {
 		fputs(" 2", stdout);
@@ -59,6 +73,7 @@ factor(double n)
 		n = rm;
 		s = sqrt(n) + 1;
 	};
+
 	for (d = 1, i = 1; d <= s; i++) {
 		d += wheel[i%48];
 		while (modf(n/d, &rm) == 0) {
@@ -67,24 +82,31 @@ factor(double n)
 			s = sqrt(n) + 1;
 		};
 	};
+
 	if (n > 1) printf(" %.0lf", n);
+
 	putchar('\n');
 }
 
 int
 main(int argc, char *argv[])
 {
-	int i;
-	double n;
+	double in;
+	double sup = 9.007199254740992E15; /* max integer-accurate double */
 
-	if (argc < 2) {
-		fputs("usage: factor int ...\n", stdout);
+	ARGBEGIN{
+	ARGNUM: argv[0]--; goto neg;
+	default:
+		fprintf(stderr, "usage: %s int...\n", argv0);
 		return 1;
-	};
+	}ARGEND;
+neg:
 
-	for (i = 1; i < argc; i++) {
-		n = atof(argv[i]);
-		if (n > 0) factor(n);
+	for (; *argv; argv++) {
+		in = atof(*argv);
+		if (in > -sup && in < sup) {
+			factor(in);
+		} else fputs("Limits exceeded\n", stderr);
 	};
 
 	return 0;

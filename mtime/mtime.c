@@ -49,7 +49,7 @@ main(int argc, char *argv[])
 	case 'c': format |= ctime; break;
 	default:
 usage:
-		fprintf(stderr, "usage: %s [-aAclm] file ...\n", argv0);
+		fprintf(stderr, "usage: %s [-aAclm] file...\n", argv0);
 		return 1;
 	}ARGEND;
 

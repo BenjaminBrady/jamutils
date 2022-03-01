@@ -1,8 +1,8 @@
-/* multiply: multiply the inputted set.
+/* multiply: print the product of the inputted set.
  * 
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../arg.h"
+
+char *argv0;
+char *fmt = "%.16G\n";
+
 int
 main(int argc, char *argv[])
 {
-	int i;
 	double product;
-	if (argc < 2) {
-		printf("Usage: multiply multiplicand\n");
+
+	ARGBEGIN{
+	case 'f':
+		if ((fmt = ARGF()) == NULL) goto usage;
+		break;
+	ARGNUM: argv[0]--; goto neg;
+	default:
+usage:
+		fprintf(stderr, "usage: %s [-f fmt] multiplicand\n", argv0);
 		return 1;
-	};
-	product = 1;
-	for (i = 1; i < argc; i++) product *= atof(argv[i]);
-	printf("%.16g\n", product);
+	}ARGEND;
+	if (!argc) goto usage;
+neg:
+
+	product = 1E0;
+	for (; *argv; argv++) product *= atof(*argv);
+	printf(fmt, product);
+
 	return 0;
 }

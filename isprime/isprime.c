@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,10 +57,11 @@ int
 main(int argc, char *argv[])
 {
 	int i;
-	double t, sup = 9.007199254740992E15; /* max integer-accurate double */
+	double t;
+	double sup = 9.007199254740992E15; /* max integer-accurate double */
 
 	if (argc < 2) {
-		fputs("usage: isprime int ...\n", stderr);
+		fprintf(stderr, "usage: %s int...\n", argv[0]);
 		return 1;
 	};
 

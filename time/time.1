@@ -3,15 +3,16 @@
 time - time a simple command
 .SH SYNOPSIS
 .B time
-[-p]
+.RB [ \-p ]
 .IR utility
-.RI [ argument... ]
+.RI [ argument
+.IR ... ]
 .SH DESCRIPTION
 Invoke the named
 .I utility
 with the arguments supplied in
-.I argument...
-and print timing statistics to stderr.
+.IR argument ...
+and print timing statistics to standard error.
 .SH OPTIONS
 .TP
 .B \-p
@@ -32,7 +33,7 @@ Incorrect usage.
 .B 2
 An error occurred with
 .BR time .
-Error information is printed to stderr.
+Error information is printed to standard error.
 .TP
 .B 126
 .I utility
@@ -42,9 +43,12 @@ was found, but could not be invoked.
 .I utility
 could not be found.
 .SH EXAMPLES
-In the event that time is applied to pipelines or lists of commands, the
-behaviour is unspecified. The following command can be used to apply time to a
-command of arbitrary complexity:
+In the event that
+.B time
+is applied to pipelines or lists of commands, the behaviour is unspecified. The
+following command can be used to apply
+.B time
+to a command of arbitrary complexity:
 .TP
 .B time sh \-c 'command'
 .SH AUTHOR

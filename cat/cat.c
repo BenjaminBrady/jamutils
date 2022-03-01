@@ -70,7 +70,7 @@ main(int argc, char *argv[])
 	ARGBEGIN{
 	case 'u': break;
 	default:
-		fprintf(stderr, "usage: %s [-u] [file ...]\n", argv0);
+		fprintf(stderr, "usage: %s [-u] [file...]\n", argv0);
 		return 1;
 	}ARGEND;
 

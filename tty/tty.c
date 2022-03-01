@@ -1,8 +1,8 @@
-/* factorial: print the factorial of each argument.
- *
+/* tty: return the name of the terminal connected to standard input.
+ * 
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,55 +18,29 @@
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
 #include <stdio.h>
-#include <stdlib.h>
+#include <unistd.h>
 
 #include "../arg.h"
 
-long double factorial(long double z, long double w);
+#define _(a) (a)
 
 char *argv0;
-char *fmt = "%.16LG\n";
-int big = 1754;
-
-long double
-factorial(long double z, long double w)
-{
-	return (z == 0) ? w : factorial(z-1, z*w);
-}
 
 int
 main(int argc, char *argv[])
 {
-	int z;
+	char *tty;
 
 	ARGBEGIN{
-	case 'f':
-		if ((fmt = ARGF()) == NULL) goto usage;
-		break;
-	ARGNUM: argv[0]--; goto neg;
 	default:
 usage:
-		fprintf(stderr, "usage: %s [-f fmt] int...\n", argv0);
-		return 1;
+		fprintf(stderr, "usage: %s\n", argv0);
+		return 2;
 	}ARGEND;
-neg:
+	if (argc) goto usage;
 
-	if (!argc) goto usage;
+	tty = ttyname(STDIN_FILENO);
+	puts(tty ? tty : _("not a tty"));
 
-	for (; *argv; argv++) {
-		z = atoi(*argv);
-
-		if (z < 0) {
-			fputs("Divergent\n", stderr);
-			continue;
-		};
-		if (z > big) {
-			fputs("Limits exceeded\n", stderr);
-			continue;
-		};
-
-		printf(fmt, factorial(z, 1E0));
-	};
-
-	return 0;
+	return !tty;
 }

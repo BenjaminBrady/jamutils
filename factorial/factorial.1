@@ -1,17 +1,24 @@
 .TH FACTORIAL 1 factorial
 .SH NAME
-factorial - print the factorial of each argument.
+factorial \- print the factorial of each argument.
 .SH SYNOPSIS
 .B factorial
-.IR INTEGER ...
+.RB [ \-f
+.IR format ]
+.IR int ...
 .SH DESCRIPTION
-Interpret each argument as an integer and print the factorial.
+Print the factorial of each input.
+.SH OPTIONS
+.TP
+.BI \-f " format
+Change the output format to
+.IR format .
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

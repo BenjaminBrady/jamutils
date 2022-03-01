@@ -1,18 +1,30 @@
 .TH CLEANNAME 1 cleanname
 .SH NAME
-cleanname - optimise file paths to their most efficient form.
+cleanname \- optimise file paths to their most efficient form.
 .SH SYNOPSIS
 .B cleanname
-.IR FILENAME ...
+.RB [ \-d
+.IR path ]
+.IR filename ...
 .SH DESCRIPTION
-Interpret each argument as a filename and print the most
-efficient path to the same file (assuming no links).
+Lexically process each specified
+.I filename
+and print the shortest equivalent string that would name the same file (not
+including links to that file).
+
+Interpret . and .. directories. Truncate multiple and trailing slashes.
+.SH OPTIONS
+.TP
+.BI \-d " path
+Prepend
+.I path
+to unrooted filenames before cleaning.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

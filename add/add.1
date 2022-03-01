@@ -1,18 +1,28 @@
 .TH ADD 1 add
 .SH NAME
-add - add the inputted set
+add \- add the inputted set
 .SH SYNOPSIS
 .B add
-.RB SUMMAND
+.RB [ \-f
+.IR format ]
+.I summand
 .SH DESCRIPTION
-Take all of the supplied arguments as 64-bit
-IEEE 754 floating point numbers and print the sum.
+Take the sum of the inputted
+.I summand
+and print the result using the format "%.16G\\n" by default.
+
+The
+.I summand
+consists of an arbitrary list of IEEE-754 floating point numbers.
+
+The sum is computed in the order specified and no effort is made to maintain
+associativity.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at

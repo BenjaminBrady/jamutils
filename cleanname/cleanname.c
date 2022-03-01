@@ -2,7 +2,7 @@
  *
  * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
  * Jam Coreutils is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,14 @@
  * along with this program; see the file COPYING. If not, see
  * <https://www.gnu.org/licenses/>. */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../arg.h"
 
 char *cleanname(char *file);
+
+char *argv0;
 
 char *
 cleanname(char *file)
@@ -54,11 +60,33 @@ cleanname(char *file)
 int
 main(int argc, char *argv[])
 {
-	int i;
-	if (argc < 2) {
-		printf("Usage: cleanname file (...)\n");
+	char *wd = NULL, *ext = NULL;
+
+	ARGBEGIN{
+	case 'd':
+		if ((wd = ARGF()) != NULL) break;
+		/* Fallthrough */
+	default:
+usage:
+		fprintf(stderr, "usage: %s filename...\n", argv0);
 		return 1;
+	}ARGEND;
+
+	if (argc == 0) goto usage;
+
+	for (; *argv; argv++) {
+		if (wd == NULL || *argv[0] == '/') {
+			puts(cleanname(*argv));
+		} else {
+			if (!(ext = malloc(strlen(wd)+1 + strlen(*argv)+1))) {
+				perror("malloc");
+				return 2;
+			};
+			sprintf(ext, "%s/%s", wd, *argv);
+			puts(cleanname(ext));
+			free(ext);
+		};
 	};
-	for (i = 1; i < argc; i++) printf("%s\n", cleanname(argv[i]));
+
 	return 0;
 }

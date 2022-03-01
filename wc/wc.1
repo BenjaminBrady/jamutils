@@ -1,31 +1,44 @@
 .TH WC 1 wc
 .SH NAME
-wc - print various counts of file attributes (bytes, lines, etc.)
+wc \- print various counts of file attributes.
 .SH SYNOPSIS
 .B wc
 .RB [ \-h ]
-.IR FILE ...
+.IR file ...
 .SH OPTIONS
 .TP
 .B \-h
-Print the label of each column (file: lines, words, bytes, line length) before
-printing the counts.
+Print the label of each column 
+.IR file :
+lines, words, bytes, line length) before printing the counts.
 .SH DESCRIPTION
-Print various counts for each of the inputted files.
+Print various counts for each of the specified
+.IR files .
 
 The outputted counts are: lines, words, bytes, and line length.
 
-If more then one file is given then print the
-total across all of the attribute counts.
-
-Return 1 if no files are provided. If there is an error reading any file then
-print detailed error information and return 2.
+If more then one file is given then print the total across all of the attribute
+counts.
+.SH EXIT STATUS
+.TP
+.B 0
+The stipulated counts for all specified
+.I files
+were printed without error.
+.TP
+.B 1
+The invocation of
+.B wc
+was invalid.
+.TP
+.B 2
+An error occurred whilst writing any stipulated count for any file.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
 Jam Coreutils full documentation and source code is located at
