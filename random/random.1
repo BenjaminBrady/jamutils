@@ -1,34 +1,76 @@
-.TH RANDOM 1 random
+.TH RANDOM 1 "April 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-random \- print the output of a pseudorandom number generator.
+random \- print cryptographically secure random numbers.
 .SH SYNOPSIS
 .B random
 .RB [ \-h ]
+.RB [ \-c | \-f | \-s | \-m
+.IR limit ]
 .RI [ int ]
 .SH OPTIONS
 .TP
 .B \-h
-Print the codomain of the pseudorandom number generator.
+Print the codomain of
+.BR random .
+.TP
+.B \-c
+Output the random data as characters. Automatically set the output range to the
+width of a char (256) (therefore ignore any previous flags which modify the
+output range).
+.TP
+.B \-f
+Only stop printing the random data when interrupted. Implies
+.BR \-c .
+.TP
+.B \-s
+Set the output range to the POSIX rand() output range [0, RAND_MAX], inclusive.
+Ignore any previous flags which modify the output range. This is the default
+behaviour.
+.TP
+.BI \-m \ limit
+Set the output range to [0, 
+.IR limit ],
+inclusive. Ignore any previous flags which modify the output range.
 .TP
 .I int
 Generate and print
 .I int
-numbers. The default is one.
+random values. The default is one.
 .SH DESCRIPTION
-Print the output of the POSIX stdlib.h pseudorandom number generator function
-rand() with the current Unix Epoch time as the srand() seed.
-
-The codomain of the pseudorandom number generator is [0, RAND_MAX], inclusive,
-where RAND_MAX is a system specific constant defined in the stdlib.h system
-header. It is guaranteed to be at least 32767.
+Print uniformly distributed, cryptographically secure random numbers in the
+range [0,
+.BR s ],
+where
+.B s
+is the requested
+.I limit
+(it is RAND_MAX if unspecified).
 .SH EXTENDED DESCRIPTION
-Note that the rand() function is deterministic, hence if
+The following is a simplified explanation of how this implementation of
 .B random
-is invoked multiple times before the system clock increments, then the outputs
-will be identical.
+generates its output:
 
-Additionally, note that the rand() function is not (in general) a CSPRNG;
-therefore, the output should never be used for cryptographic applications.
+The basic operation to generate raw random data is the ChaCha20 algorithm.
+
+The POSIX stdlib.h RNG (random number generator) function, rand(), XORed with
+the hostname and effective user ID is used as a seed to generate the key.
+
+The exact number of nanoseconds which have elapsed since 1st January 1970
+according to the system clock is used as a seed to generate the nonce. The
+nonce is updated every time the counter overflows.
+
+The XOR stream from ChaCha is used as the seed for generating a uniform random
+number in the range [0, 
+.BR s ],
+where
+.B s
+is determined from the requested output width. It is the implementation defined
+limit RAND_MAX by default.
+
+Note that all algorithms used are deterministic and that no entropic,
+non-deterministic data is collected externally, so there is no prediction
+resistance in the event that an adversary learns the internal state of
+.BR random .
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
@@ -37,5 +79,5 @@ later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
 to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

@@ -1,19 +1,19 @@
 # Jamutils
-A set of POSIX-compliant core utilities written within the C99 standard.
+A set of POSIX compliant core utilities written within the C99 standard.
 
 ## Abstract
-They are a set of strictly conforming XSI user-level applications (and
-therefore a set of strictly conforming POSIX applications) where defined (e.g.
-add, isprime, shutdown, etc. are neither specified in POSIX nor XSI).
+They are a set of strictly conforming XSI userland applications (and therefore
+a set of strictly conforming POSIX applications) where defined (e.g. add,
+isprime, shutdown, etc. are neither specified in POSIX nor XSI).
 
 Included so far are: add, average, basename, cal, cat, cleanname, cmp, date,
-dirname, echo, factor, factorial, head, host, isprime, loop, ls, max, min,
-mkdir, mtime, multiply, mv, path, pbd, primes, pwd, random, reboot, return, rm,
-rmdir, seq, shutdown, sleep, strings, tail, time, tty, uname, uptime, wc, and
-whoami.
+dirname, echo, factor, factorial, head, host, isprime, ls, max, min, mkdir,
+mtime, multiply, mv, path, pbd, primes, pwd, random, reboot, return, rm, rmdir,
+seq, shutdown, sleep, strings, tail, time, tty, uname, uptime, wc, whoami, and
+yes.
 
 ## Installation
-Edit the config.mk to match your local set-up as needed (Jamutils is installed
+Edit the config.mk to match your local setup as needed (Jamutils is installed
 into the /usr/local namespace by default).
 
 Enter the following command to compile and install Jamutils (run as root if
@@ -26,7 +26,7 @@ uninstall Jamutils (run as root if necessary):
 
 	make uninstall
 
-The two main configuration options which may be passed an environment variables
+The two main configuration options which may be passed as environment variables
 are:
 
 	- PREFIX: Prefix of the path where Jamutils is installed.
@@ -54,7 +54,7 @@ is a copyrightable year that could otherwise be listed individually.
 
 Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>.
 
-jamutils (a.k.a. Jamutils, Jam Coreutils) is free software: you can
+Jamutils (a.k.a. jamutils, Jam Coreutils) is free software: you can
 redistribute it and/or modify it under the terms of the GNU General Public
 License version 3 or (at your option) any later version. You should have
 received a copy of the GNU General Public License along with Jamutils; see the

@@ -1,52 +1,53 @@
-/* echo: write arguments to stdout.
- * 
- * This file is part of Jam Coreutils.
+/* echo: write arguments to standard output.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * This file is part of Jamutils.
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "../arg.h"
-
-char *argv0;
-
 int
 main(int argc, char *argv[])
 {
-	int i, l;
-	char *s = NULL, *p = NULL;
+	int i;
+	size_t l = 0;
+	char *s = NULL, *p;
 
-	l = 1;
+	if (argc < 2) return 0;
 	for (i = 1; i < argc; i++) {
-		l += strlen(argv[i])+1;
+		l += strlen(argv[i])+1; /* arg + (' ' or NUL) */
 	};
-	if (!(s = malloc(l))) {
+	if (!(s = (char *) malloc(l))) {
 		perror("malloc");
 		return 1;
 	};
 	p = s;
+	/* TODO: handle supported operands */
 
 	for (i = 1; i < argc; i++) {
 		strcpy(s, argv[i]);
 		s += strlen(s);
-		if (i != argc-1) *s++ = ' ';
+		if (i == argc-1) {
+			*s++ = 0;
+		} else *s++ = ' ';
 	};
 
 	puts(p);
+
 	return 0;
 }

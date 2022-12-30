@@ -1,4 +1,4 @@
-/* dirname: return the directory portion of a pathname.
+/* dirname: strip the filenames from pathnames.
  *
  * This file is part of Jamutils.
  *
@@ -24,17 +24,24 @@
 
 char *argv0;
 
+#ifdef MULTIPLE_DIRECTORIES
+#define usage_string "usage: %s string...\n"
+#else
+#define usage_string "usage: %s string\n"
+#endif
+
 int
 main(int argc, char *argv[])
 {
 	ARGBEGIN{
 	default:
 usage:
-		fprintf(stderr, "usage: %s\n", argv0);
+		fprintf(stderr, usage_string, argv0);
 		return 1;
 	}ARGEND;
 	if (!argc) goto usage;
 
+	/* FIXME: libgen.h's dirname() does not function as expected */
 #ifdef MULTIPLE_DIRECTORIES
 	for (; *argv; argv++)
 #endif

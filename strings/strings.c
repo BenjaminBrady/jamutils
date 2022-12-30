@@ -1,22 +1,22 @@
-/* strings: extract the printable strings from a file.
- * 
- * This file is part of Jam Coreutils.
+/* strings: extract the printable strings from files.
+ *
+ * This file is part of Jamutils.
  *
  * Copyright (C) 2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include "../arg.h"
+#include "arg.h"
 
 #ifndef STRINGS_WRAP_LINES
 #define STRINGS_WRAP_LINES 0 /* Define this to wrap lines */
@@ -49,7 +49,7 @@ extstr(int fd)
 	char c, buf[BUFSIZE];
 	size_t i = 0, j = 0, n = 0;
 
-	while (read(fd, (void *) &c, 1) > 0) {
+	while (read(fd, (void *) &c, sizeof(c)) > 0) {
 		if (isascii(c)) {
 			if (j == 0) j = i;
 			buf[n++] = c;

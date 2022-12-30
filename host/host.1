@@ -1,18 +1,24 @@
-.TH HOST 1 host
+.TH HOST 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-host - print the name of the host
+host \- print the name of the host.
 .SH SYNOPSIS
 .B host
 .SH DESCRIPTION
-Print the name of the host if it can be found; return 1 and
-print a relevant error if the hostname cannot be found.
+Print the name of the host.
+.SH EXIT STATUS
+.TP
+.B 0
+The name of the host was printed successfully.
+.TP
+.B 1
+The name of the host could not be ascertained.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

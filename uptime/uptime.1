@@ -1,20 +1,23 @@
-.TH UPTIME 1 uptime
+.TH UPTIME 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-uptime - print the duration in which the system has been consecutively running
+uptime \- print the uptime of the system.
 .SH SYNOPSIS
 .B uptime
 .SH DESCRIPTION
-Print the amount of time the system has been running consecutively.
+Print the elapsed time of PID1 in the format: "[[DD-]HH:]MM:SS".
 
-The display format is HH:MM:SS. The amount is days is
-displayed before the time if it is greater than 0.
+This value describes the duration that the system has been consecutively
+running for.
+.SH EXTENDED DESCRIPTION
+The elapsed time of PID1 is useful as the uptime of the entire system, but is
+not generically the same timestamp that the kernel would measure.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

@@ -1,22 +1,22 @@
 /* ls: list the contents of directories.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
  * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,11 +27,11 @@
 
 void printdir(char *p);
 
-int success;
-int aflag;
+int ret;
+int aflg;
 char *argv0;
 
-inline void
+void
 printdir(char *p)
 {
 	int i, n;
@@ -40,25 +40,23 @@ printdir(char *p)
 	if ((n = scandir(p, &f, NULL, alphasort)) < 0) {
 		fprintf(stderr, "scandir %s: ", p);
 		perror(NULL);
-		success = 1;
+		ret = 2;
 		return;
 	};
 
 	for (i = 0; i < n; i++) {
 		if (f[i]->d_type == DT_DIR) {
-			if (aflag || ((f[i]->d_name)[0] != '.')) {
-				puts(f[i]->d_name);
-				free(f[i]);
-			};
+			if (aflg || ((f[i]->d_name)[0] != '.'))
+				printf("%s/\n", f[i]->d_name);
+			free(f[i]);
+			f[i] = NULL;
 		};
 	};
 	for (i = 0; i < n; i++) {
-		if (f[i]->d_type != DT_DIR) {
-			if (aflag || ((f[i]->d_name)[0] != '.')) {
-				puts(f[i]->d_name);
-				free(f[i]);
-			};
-		};
+		if (f[i] == NULL) continue;
+		if (aflg || ((f[i]->d_name)[0] != '.'))
+			puts(f[i]->d_name);
+		free(f[i]);
 	};
 
 	free(f);
@@ -67,23 +65,28 @@ printdir(char *p)
 int
 main(int argc, char *argv[])
 {
-	int i;
+	char *in;
 
 	ARGBEGIN{
-	case 'a': aflag = 1; break;
+	case 'a': aflg = 1; break;
+	case '-':
+		in = ARGF();
+		(void)in;
+		break;
 	default:
-		fprintf(stderr, "usage: %s [-a]\n", argv0);
-		return 1;
+		/* TODO: Add POSIX compliance. For now, we just accept and
+		 * ignore all flags to force a valid invocation. */
+		break;
 	}ARGEND;
 
 	if (!argc) {
 		printdir(".");
-	} else {
-		for (i = 0; i < argc; i++) {
-			printf("%s:\n", argv[i]);
-			printdir(argv[i]);
-		};
+	} else if (argc == 1) {
+		printdir(*argv);
+	} else for (; *argv; argv++) {
+		printf("%s:\n", *argv);
+		printdir(*argv);
 	};
 
-	return success;
+	return ret;
 }

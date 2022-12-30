@@ -1,14 +1,8 @@
-/*
- * Copy me if you can.
- * by 20h
- */
-
 #ifndef ARG_H__
 #define ARG_H__
 
 extern char *argv0;
 
-/* use main(int argc, char *argv[]) */
 #define ARGBEGIN	for (argv0 = *argv, argv++, argc--;\
 					argv[0] && argv[0][0] == '-'\
 					&& argv[0][1];\
@@ -29,7 +23,6 @@ extern char *argv0;
 					argc_ = argv[0][0];\
 					switch (argc_)
 
-/* Handles obsolete -NUM syntax */
 #define ARGNUM				case '0':\
 					case '1':\
 					case '2':\
@@ -45,8 +38,6 @@ extern char *argv0;
 			}
 
 #define ARGC()		argc_
-
-#define ARGNUMF()	(brk_ = 1, estrtonum(argv[0], 0, INT_MAX))
 
 #define EARGF(x)	((argv[0][1] == '\0' && argv[1] == NULL)?\
 				((x), abort(), (char *)0) :\

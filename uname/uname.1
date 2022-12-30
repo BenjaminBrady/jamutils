@@ -1,9 +1,9 @@
-.TH UNAME 1 uname
+.TH UNAME 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-uname - print system information
+uname \- print system information.
 .SH SYNOPSIS
 .B uname
-.RI [ -amnrsv ]
+.RI [ \-amnrsv ]
 .SH OPTIONS
 .TP
 .B \-a
@@ -29,16 +29,17 @@ Print system information as requested by the given flags.
 If no flags are passed then the output will be equivalent to running:
 .B
 uname \-s
-.PP
+.R "."
+.SH EXTENDED DESCRIPTION
 Note that on GNU/Linux, the \-s, \-r, and \-v flags refer to the kernel's name,
 release, and version respectively instead of the operating system.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

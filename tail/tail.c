@@ -1,74 +1,129 @@
-/* tail: output the last few lines (10 by default) of specified files.
+/* tail: print the last few lines of files.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <wchar.h> /* Wide-character support proves tumultuous. See head.c */
+#include <wctype.h>
+#include <sys/stat.h>
+
+#include "arg.h"
+
+void footer(int fd, char *name);
+
+long lines = 10L;
+int ret;
+char *argv0;
+int cflg, fflg;
+
+void
+footer(int fd, char *name)
+{
+	FILE *f;
+	long p, nl = 0L;
+	wint_t c;
+
+	if ((f = fdopen(fd, "rb")) == NULL) {
+		fprintf(stderr, "%s: ", name);
+		perror("fdopen");
+		ret = 2;
+		return;
+	};
+
+	/* FIXME: cannot seek on certain streams, e.g. stdin */
+	if (fseek(f, 0, SEEK_END) < 0) {
+		perror("fseek");
+		ret = 2;
+		return;
+	};
+	if (cflg) {
+		for (p = ftell(f); p >= 0; p--) {
+			if (fseek(f, p, SEEK_SET) < 0) {
+				perror("fseek");
+				ret = 2;
+				return;
+			};
+			fgetwc(f);
+			nl++;
+			if (nl > lines) goto print;
+		};
+	} else {
+		for (p = ftell(f); p >= 0; p--) {
+			if (fseek(f, p, SEEK_SET) < 0) {
+				perror("fseek");
+				ret = 2;
+				return;
+			};
+			if (fgetwc(f) == L'\n') {
+				nl++;
+				if (nl > lines) goto print;
+			};
+		};
+	};
+	fseek(f, 0L, SEEK_SET);
+print:
+	while ((c = fgetwc(f)) != WEOF) fputwc(c, stdout);
+
+	fclose(f);
+}
 
 int
 main(int argc, char *argv[])
 {
-	char buf[8192];
-	FILE *f;
-	int i, nflag, success, multi;
-	long lines, nl, p;
-	if (argc < 2) {
+	int fd;
+	char *in;
+
+	ARGBEGIN{
+	case 'c':
+		cflg = 1;
+		goto input;
+	case 'f': fflg = 1; break; /* TODO: implement -f */
+	case 'n':
+		cflg = 0;
+input:
+		if ((in = ARGF()) == NULL) goto usage;
+		lines = atol(in);
+		break;
+	default:
 usage:
-		printf("Usage: tail [-n lines] file (...)\n");
+		fprintf(stderr,
+			"usage: %s [-f] [-c number|-n number] [file]\n",
+			argv0);
 		return 1;
-	};
-	lines = 10L;
-	nflag = 0;
-	nl = 0L;
-	success = 0;
-	if (strncmp(argv[1], "-n", 2) == 0) {
-		if (argv[2] != NULL) {
-			lines = atol(argv[2]);
-			if (lines < 1) return 0;
-			nflag = 2;
-		} else goto usage;
-	};
-	if (argc-nflag-2 > 0) {
-		multi = 1;
-	} else multi = 0;
-	for (i = 1+nflag; i < argc; i++) {
-		if (multi) printf("%s:\n", argv[i]);
-		if (!(f = fopen(argv[i], "r"))) {
-			perror("Error opening file");
-			success = 2;
+	}ARGEND;
+	if (lines < 1) return 0;
+
+	if (!(argc && strcmp(*argv, "-"))) {
+		footer(STDIN_FILENO, "<stdin>");
+	} else {
+		if ((fd = open(*argv, O_RDONLY)) < 0) {
+			fprintf(stderr, "open %s: ", *argv);
+			perror(NULL);
+			ret = 2;
 		} else {
-			fseek(f, 0, SEEK_END);
-			for (p = ftell(f); p >= 0; p--) {
-				fseek(f, p, SEEK_SET);
-				if (fgetc(f) == '\n') {
-					nl++;
-					if (nl > lines) goto print;
-				};
-			};
-			fseek(f, 0, SEEK_SET);
-print:
-			while ((fgets(buf, 8192, f)) != NULL)
-				printf("%s", buf);
-			fclose(f);
-			nl = 0L;
+			footer(fd, *argv);
+			close(fd);
 		};
-		if (multi && i < argc-1) printf("\n");
 	};
-	return success;
+
+	return ret;
 }

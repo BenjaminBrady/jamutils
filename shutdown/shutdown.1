@@ -1,15 +1,14 @@
-.TH SHUTDOWN 1 shutdown
+.TH SHUTDOWN 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-shutdown \- stop and power off a Linux system.
+shutdown \- hard reset the system via Linux.
 .SH SYNOPSIS
 .B shutdown
 .SH DESCRIPTION
-Call the system shutdown function of the Linux kernel.
+Call the Linux reboot() function with LINUX_REBOOT_CMD_POWER_OFF. This has the
+effect of powering off the system if the Linux kernel is installed.
 
-Linux must be the currently running kernel and the user must have sufficient
-privileges in the form of having CAP_SYS_BOOT inside their user namespace for
-.B shutdown
-to function correctly.
+The caller must have sufficient privileges in the form of having CAP_SYS_BOOT
+inside of their user namespace.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
@@ -18,5 +17,5 @@ later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
 to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

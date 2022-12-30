@@ -1,33 +1,36 @@
 /* host: print the name of the host.
- * 
- * This file is part of Jam Coreutils.
  *
- * Copyright (C) 2020 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * This file is part of Jamutils.
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
+#include <limits.h>
 #include <stdio.h>
 #include <unistd.h>
 
 int
 main(void)
 {
-	char buf[8192];
-	if (gethostname(buf, sizeof(buf)) < 0) {
-		perror("Error finding hostname");
+	char hostname[HOST_NAME_MAX+1];
+
+	if (gethostname(hostname, sizeof(hostname)) < 0) {
+		perror("gethostname");
 		return 1;
 	};
-	printf("%s\n", buf);
+	puts(hostname);
+
 	return 0;
 }

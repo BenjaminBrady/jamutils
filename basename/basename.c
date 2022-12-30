@@ -1,38 +1,49 @@
-/* basename: strip directory from filenames.
+/* basename: strip the path prefix from pathnames.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <stdio.h>
 #include <string.h>
+
+#include "arg.h"
+
+char *argv0;
 
 int
 main(int argc, char *argv[])
 {
-	int i;
+	char *p;
 	char *bn;
-	if (argc < 2) {
-		printf("Usage: basename filename (...)\n");
+
+	ARGBEGIN{
+	default:
+		fprintf(stderr, "usage: %s pathname...\n", argv0);
 		return 1;
-	};
-	for (i = 1; i < argc; i++) {
-		bn = strrchr(argv[i], '/');
+	}ARGEND;
+
+	for (; *argv; argv++) {
+		p = *argv;
+		bn = strrchr(p, '/');
 		if (bn != NULL) bn++;
-		printf("%s\n", bn);
+		if (bn == NULL) {
+			puts(p);
+		} else puts(bn);
 	};
+
 	return 0;
 }

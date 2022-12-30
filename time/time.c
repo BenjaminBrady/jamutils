@@ -1,22 +1,22 @@
 /* time: time a simple command.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
- * Copyright (C) 2021 Benjamin Brady
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -24,7 +24,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "../arg.h"
+#include "arg.h"
+
+#define _(a) (a)
 
 char *argv0;
 
@@ -46,7 +48,6 @@ usage:
 				argv0);
 		return 1;
 	}ARGEND;
-
 	if (!argc) goto usage;
 
 	if ((cr = sysconf(_SC_CLK_TCK)) <= 0) {
@@ -78,13 +79,13 @@ usage:
 	};
 
 	if (WIFSIGNALED(wstatus)) {
-		fprintf(stderr, "Utility terminated by signal %d\n",
+		fprintf(stderr, _("Utility terminated by signal %d\n"),
 				WTERMSIG(wstatus));
 		ret = 128 + WTERMSIG(wstatus);
 	};
 	if (WIFEXITED(wstatus)) ret = WEXITSTATUS(wstatus);
 	rate = 1 / (double)cr;
-	fprintf(stderr, "real %f\nuser %f\nsys %f\n",
+	fprintf(stderr, _("real %f\nuser %f\nsys %f\n"),
 			(t1 - t0) *      rate,
 			tms.tms_cutime * rate,
 			tms.tms_cstime * rate);

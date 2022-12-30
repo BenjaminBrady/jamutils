@@ -1,32 +1,32 @@
-/* cat: concatenate inputted files and write to stdout.
- * 
- * This file is part of Jam Coreutils.
+/* cat: concatenate inputted files and write to standard output.
+ *
+ * This file is part of Jamutils.
  *
  * Copyright (C) 2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include "../arg.h"
+#include "arg.h"
 
 void print(int fd, const char *s);
-ssize_t writeall(const void *buf, size_t len);
+ssize_t writeall(const char *buf, size_t len);
 
 char *argv0;
 int ret;
@@ -47,7 +47,7 @@ print(int fd, const char *s)
 }
 
 ssize_t
-writeall(const void *buf, size_t len)
+writeall(const char *buf, size_t len)
 {
 	ssize_t n;
 	const char *p = buf;

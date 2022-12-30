@@ -1,13 +1,13 @@
-.TH DATE 1 date
+.TH DATE 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-date - print or set the time and date
+date \- print or modify the current time and date.
 .SH SYNOPSIS
 .B date
-.RI [ -u ]
-.RI [ +FORMAT ]
+.RI [ \-u ]
+.RI [ +format ]
 .br
 .B date
-.RI [ -u ]
+.RI [ \-u ]
 .IR MMDDhhmm [[ CC ] YY ][ .ss ]
 .SH OPTIONS
 .TP
@@ -17,10 +17,14 @@ variable was set to the string "UTC0", or its equivalent historical value of
 "GMT0".
 .SH DESCRIPTION
 Print the current time and date according to the system's local time in the
-specified FORMAT; otherwise, set the system time and date.
+specified
+.IR format ;
+otherwise, set the system time and date.
 
-The FORMAT text is printed verbatim, except for the following
-sequences which are replaced with their corresponding meaning:
+The
+.I format
+text is printed verbatim, except for the following sequences which are replaced
+with their corresponding meaning:
 .TP
 %%
 a literal %
@@ -132,14 +136,14 @@ The date was written successfully, or the system clock was modified without
 error.
 .TP
 .B 1
-An error occured while modifying the system clock.
+An error occurred whilest modifying the system clock.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

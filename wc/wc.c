@@ -1,91 +1,137 @@
-/* wc: print various counts of file attributes (bytes, lines, etc.).
+/* wc: print byte, line, and word counts of files.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
+#include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <wchar.h>
+#include <wctype.h>
+#include <sys/stat.h>
 
-long tl = 0;
-long tw = 0;
-long tb = 0;
-long tll = 0;
+#include "arg.h"
+
+#define _(a) (a)
+#define c_count (1 << 0)
+#define l_count (1 << 1)
+#define w_count (1 << 2)
+
+void count(int fd, char *name);
+
+int ret;
+int flag;
+int mflg;
+long tc, tl, tw;
+char *argv0;
+
+void
+count(int fd, char *name)
+{
+	FILE *f;
+	int wsf = 0;
+	long c = 0L;
+	long l = 0L;
+	long w = 0L;
+	wint_t ch;
+	long b;
+
+	if ((f = fdopen(fd, "rb")) == NULL) {
+		fprintf(stderr, "%s: ", name);
+		perror("fdopen");
+		ret = 2;
+		return;
+	};
+
+	while ((ch = fgetwc(f)) != WEOF) {
+		if (iswspace(ch)) {
+			if (ch == L'\n') l++;
+			if (wsf == 1) {
+				wsf = 0;
+				w++;
+			};
+		} else wsf = 1;
+		c++;
+	};
+
+	if (!mflg && (fd != 0)) {
+		if ((b = ftell(f)) < 0) {
+			fprintf(stderr, "%s: ", name);
+			perror("ftell");
+			ret = 2;
+			b = c;
+		};
+		c = b;
+	};
+
+	tc += c;
+	tl += l;
+	tw += w;
+
+	if (flag & l_count) printf("%ld ", l);
+	if (flag & w_count) printf("%ld ", w);
+	if (flag & c_count) printf("%ld ", c);
+	if (flag == 0) printf("%ld %ld %ld ", l, w, c);
+	puts(name);
+}
 
 int
 main(int argc, char *argv[])
 {
-	int i, success, wsf;
-	long l, w, b, ll, mll;
-	char c;
-	FILE *f;
-	if (argc < 2) {
-		printf("Usage: wc file (...)\n");
+	int i, fd;
+
+	ARGBEGIN{
+	case 'c': flag |= c_count; mflg = 0; break;
+	case 'l': flag |= l_count; break;
+	case 'm': flag |= c_count; mflg = 1; break;
+	case 'w': flag |= w_count; break;
+	default:
+		fprintf(stderr, "usage: %s [-c|-m] [-lw] [file...]\n", argv0);
 		return 1;
-	};
-	if (strncmp(argv[1], "-h", 2) == 0) {
-		printf("file: lines, words, bytes, line length\n");
-		argv++;
-		argc--;
-	};
-	success = 0;
-	for (i = 1; i < argc; i++) {
-		if (!(f = fopen(argv[i], "r"))) {
-			success = 2;
-			perror("Opening file");
-		} else {
-			l = w = b = ll = mll = 0L;
-			wsf = 0;
-			while ((c = fgetc(f)) != EOF) {
-				switch (c) {
-				case '\n':
-					if (ll > mll) mll = ll;
-					ll = 0;
-					l++;
-					goto sp;
-				case '\t': /* FALLTHROUGH */
-					ll += 7 - (ll % 8);
-				case '\v':
-				case '\f':
-				case '\r':
-				case  ' ':
-					ll++;
-sp:
-					if (wsf == 1) {
-						wsf = 0;
-						w++;
-					};
-					break;
-				default:
-					ll++;
-					wsf = 1;
+	}ARGEND;
+
+	if (!argc) {
+		count(STDIN_FILENO, "<stdin>");
+	} else {
+		for (i = 0; i < argc; i++) {
+			if (!strcmp(argv[i], "-")) {
+				count(STDIN_FILENO, "<stdin>");
+			} else {
+				if ((fd = open(argv[i], O_RDONLY)) < 0) {
+					fprintf(stderr, "open %s: ", argv[i]);
+					perror(NULL);
+					ret = 2;
+				} else {
+					count(fd, argv[i]);
+					close(fd);
 				};
 			};
-			if (ll > mll) mll = ll;
-			b = ftell(f);
-			fclose(f);
-			printf("%s: %li, %li, %li, %li\n",
-					argv[i], l, w, b, mll);
-			tl += l;
-			tw += w;
-			tb += b;
-			if (mll > tll) tll = mll;
+		};
+
+		if (argc > 1) {
+			if (flag & l_count) printf("%ld ", tl);
+			if (flag & w_count) printf("%ld ", tw);
+			if (flag & c_count) printf("%ld ", tc);
+			if (flag == 0) printf("%ld %ld %ld ", tl, tw, tc);
+			fputs(_("total\n"), stdout);
 		};
 	};
-	if (argc > 2)
-		printf("total: %li, %li, %li, %li\n", tl, tw, tb, tll);
-	return success;
+
+	return ret;
 }

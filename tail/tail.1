@@ -1,21 +1,49 @@
-.TH TAIL 1 tail
+.TH TAIL 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-tail - output the last few lines (10 by default) of specified files
+tail \- print the last few lines of files.
 .SH SYNOPSIS
 .B tail
-.RB [ \-n
-.IR lines ]
-.IR FILE ...
+.RB [ \-f ]
+.RB [ \-c
+.IR number |
+.B \-n
+.IR number ]
+.RI [ file ]
 .SH DESCRIPTION
-Open all specified files and print the specified amount of lines from
-the bottom. If no lines are specified then 10 are printed by default.
+Copy the contents of
+.I file
+to standard output starting
+.I number
+characters or lines from the end of
+.I file.
+
+If neither the
+.B \-c
+nor
+.B \-n
+flags were invoked, then use ten lines as the offset.
+.SH OPTIONS
+.TP
+.BI \-c " number"
+Use a byte offset of
+.IR number .
+.TP
+.B \-f
+If the
+.I file
+is a regular file or FIFO, then do not terminate after the end of the file.
+Instead, keep copying as more data is written.
+.TP
+.BI \-n " number"
+Use a line offset of
+.IR number .
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

@@ -1,25 +1,27 @@
-/* primes: print the prime numbers between the given range.
- * 
- * This file is part of Jam Coreutils.
+/* primes: print prime numbers in a range.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * This file is part of Jamutils.
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#define _(a) (a)
 
 void transform(double lb, long k);
 
@@ -33,8 +35,8 @@ int pt[50] = {
 
 char table[1000];
 
-char bittab[] = {
-	1, 2, 4, 8, 16, 32, 64, -128,
+unsigned char bittab[] = {
+	1, 2, 4, 8, 16, 32, 64, 128,
 };
 
 double wheel[48] = {
@@ -50,6 +52,7 @@ transform(double lb, long k)
 {
 	double t1;
 	long j;
+
 	modf(lb/k, &t1);
 	j = k*t1 - lb;
 	if (j < 0) j += k;
@@ -60,12 +63,14 @@ int
 main(int argc, char *argv[])
 {
 	int i;
-	double sup, lb, ub, temp, v, k;
-	sup = 9.007199254740992E15;
+	double lb, ub, temp, v, k;
+	double sup = 9.007199254740992E15; /* Maximum int-accurate double */
+
 	if (argc < 2) {
-		fputs("Usage: primes starting [ending]\n", stderr);
+		fprintf(stderr, "usage: %s [starting [ending]]\n", argv[0]);
 		return 1;
 	};
+
 	lb = atof(argv[1]);
 	ub = sup;
 	if (argc > 2) {
@@ -73,7 +78,8 @@ main(int argc, char *argv[])
 		if (ub < lb) return 0;
 		if (ub > sup) {
 limits:
-			fputs("Limits exceeded\n", stderr);
+
+			fputs(_("Limits exceeded\n"), stderr);
 			return 1;
 		};
 	};
@@ -87,6 +93,7 @@ limits:
 		};
 		lb = 230;
 	};
+
 	modf(lb/2, &temp);
 	lb = 2E0 * temp + 1;
 	for (;;) {
@@ -107,5 +114,6 @@ limits:
 		};
 		lb += 1000*8;
 	};
+
 	return 0;
 }

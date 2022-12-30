@@ -1,18 +1,34 @@
-.TH PWD 1 pwd
+.TH PWD 1 "May 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-pwd - print the absolute path to the current working directory
+pwd \- print the absolute path to the current working directory.
 .SH SYNOPSIS
 .B pwd
+.RB [ \-L | \-P ]
 .SH DESCRIPTION
-Print the absolute path (path from the root directory) to
-the current working directory (./).
+Print an absolute path to the current working directory which contains neither
+"." nor "..".
+.SH OPTIONS
+.TP
+.B \-L
+Use the PWD environment variable. Ignore previous occurrences of
+.BR \-P .
+
+This is the default behaviour.
+
+This flag is only acknowledged if PWD: points to the current working directory
+and contains neither "." nor "..".
+.TP
+.B \-P
+Use a physical path to the current working directory i.e. a path which contains
+no symbolic links. Ignore previous occurrences of
+.BR \-L .
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils\' full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

@@ -1,22 +1,22 @@
 /* rm: remove the specified files.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
  * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -27,7 +27,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "../arg.h"
+#include "arg.h"
 
 #define _(a) (a)
 
@@ -73,7 +73,8 @@ rm(const char *file)
 			return;
 		};
 
-		if ((!fflg) && (((access(file, W_OK) < 0) && isatty(0)) ||
+		if ((!fflg) && (((access(file, W_OK) < 0) &&
+						isatty(STDIN_FILENO)) ||
 					(iflg))) {
 			fprintf(stderr, _("remove contents of \'%s\'? "),
 					file);
@@ -95,7 +96,8 @@ rm(const char *file)
 			};
 		};
 	} else {
-		if ((!fflg) && (((access(file, W_OK) < 0) && isatty(0)) ||
+		if ((!fflg) && (((access(file, W_OK) < 0) &&
+						isatty(STDIN_FILENO)) ||
 					(iflg))) {
 			fprintf(stderr, _("remove \'%s\'? "), file);
 			if (!(prompt())) return;
@@ -125,7 +127,7 @@ rm_contents(const char *dir)
 	};
 
 	maxlen = strlen(dir) + 1 + NAME_MAX+1; /* path + / + name */
-	if (!(name = malloc(maxlen))) {
+	if (!(name = (char *) malloc(maxlen))) {
 		perror("malloc");
 		return;
 	};
@@ -147,10 +149,12 @@ int
 prompt(void)
 {
 	/* TODO: add NLS */
-	int val;
-	int c = getchar();
+	int val, c;
 
+	fflush(stdout);
+	c = getchar();
 	val = (c == 'y' || c == 'Y');
+
 	while (c != '\n' && c != EOF) c = getchar();
 
 	return val;

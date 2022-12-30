@@ -1,29 +1,43 @@
-.TH WC 1 wc
+.TH WC 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-wc \- print various counts of file attributes.
+wc \- print byte, line, and word counts of files.
 .SH SYNOPSIS
 .B wc
-.RB [ \-h ]
-.IR file ...
+.RB [ \-c | \-m ]
+.RB [ \-lw ]
+.RI [ file ...]
 .SH OPTIONS
 .TP
-.B \-h
-Print the label of each column 
-.IR file :
-lines, words, bytes, line length) before printing the counts.
+.B \-c
+Print the byte count of each
+.IR file ,
+replacing the character count.
+.TP
+.B \-l
+Print the line count of each
+.IR file .
+.TP
+.B \-m
+Print the character count of each
+.IR file ,
+replacing the byte count.
+.TP
+.B \-w
+Print the word count of each
+.IR file .
 .SH DESCRIPTION
-Print various counts for each of the specified
-.IR files .
+Print various counts for each
+.IR file .
 
-The outputted counts are: lines, words, bytes, and line length.
+If no flags are passed, then print all counts.
 
-If more then one file is given then print the total across all of the attribute
-counts.
+If more than one file is counted, then print the total for each attribute
+count.
 .SH EXIT STATUS
 .TP
 .B 0
-The stipulated counts for all specified
-.I files
+The stipulated counts for each specified
+.I file
 were printed without error.
 .TP
 .B 1
@@ -41,5 +55,5 @@ later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
 to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

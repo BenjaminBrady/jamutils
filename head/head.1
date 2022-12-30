@@ -1,25 +1,34 @@
-.TH HEAD 1 head
+.TH HEAD 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-head - output the first few lines (10 by default) of specified files
+head \- print the first few lines of files.
 .SH SYNOPSIS
 .B head
 .RB [ \-n
 .IR lines ]
-.IR FILE ...
+.IR file ...
 .SH DESCRIPTION
-Open all specified files and print the specified amount of lines
-from the top. If no lines are specified then 10 are printed by default.
+Copy the requested amount of
+.I lines
+from each
+.I file
+to standard output.
+
+If the
+.B \-n
+flag was not specified, then print ten lines.
 .SH OPTIONS
 .TP
-.B \-n " lines"
-Sets the amount of lines to be printed.
+.BI \-n " lines"
+Set the amount of
+.I lines
+to print.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

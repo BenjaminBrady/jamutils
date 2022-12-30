@@ -1,27 +1,28 @@
-.TH LS 1 ls
+.TH LS 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-ls - list the contents of directories
+ls \- list the contents of directories.
 .SH SYNOPSIS
 .B ls
 .RB [ \-a ]
-.RI [ FILE ...]
+.RI [ file ...]
 .SH OPTIONS
 .TP
 .B \-a
-Include files and directories beginning with .
+Include files and directories beginning with '.'
 .SH DESCRIPTION
-List the contents of the inputted directory. If none are specified
-then list the contents of the current working directory.
+List the contents of the inputted directory. If none are specified then list
+the contents of the current working directory.
 
-Any files or directories which begin with . are
-ignored unless otherwise specified.
+Any file or directory which begins with '.' is ignored unless
+.B \-a
+was specified.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

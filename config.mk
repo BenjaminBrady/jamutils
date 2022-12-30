@@ -17,24 +17,25 @@
 # Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
 
 # Jamutils version
-VERSION = 1.2.0
+VERSION = 1.3.0
 
 # Customise below to fit your system
 
-# paths
+# Paths
 PREFIX = /usr/local
 MANPREFIX = ${PREFIX}/share/man
 
-# includes and libs
-INCS = -I..
-LIBS = -lm
+# Includes and Libraries
+INCS = -I.. -I. -I/usr/include
+LIBS = -lm -L/usr/lib
 
-# flags
-CPPFLAGS = -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -D_DEFAULT_SOURCE\
-	   -D_BSD_SOURCE -DJAMUTILS_VERSION=\"${VERSION}\"
-CFLAGS = -std=c99 -pedantic -Os -Wall -Wextra -Wno-deprecated-declarations\
+# Flags
+CPPFLAGS += -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -D_DEFAULT_SOURCE\
+	    -D_BSD_SOURCE -DJAMUTILS_VERSION=\"${VERSION}\" -D__Jamutils__
+#CFLAGS = -g -std=c99 -pedantic -Wall -Wextra -O0 ${INCS} ${CPPFLAGS}
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -Wno-deprecated-declarations -Os\
 	 ${INCS} ${CPPFLAGS}
-LDFLAGS = ${LIBS}
+LDFLAGS += ${LIBS} -s
 
-# compiler
+# Compiler
 CC = cc

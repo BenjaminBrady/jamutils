@@ -31,10 +31,10 @@ SUBDIRS = add\
 	  echo\
 	  factor\
 	  factorial\
+	  false\
 	  head\
 	  host\
 	  isprime\
-	  loop\
 	  ls\
 	  max\
 	  min\
@@ -58,28 +58,34 @@ SUBDIRS = add\
 	  sync\
 	  tail\
 	  time\
+	  touch\
+	  true\
 	  tty\
 	  uname\
 	  uptime\
 	  wc\
-	  whoami
+	  whoami\
+	  yes
 
 all: options jamutils
 
 options:
-	@echo Jamutils ${VERSION} build options:
+	@echo "Jamutils ${VERSION} build options:"
 	@echo "CFLAGS  = ${CFLAGS}"
 	@echo "LDFLAGS = ${LDFLAGS}"
 	@echo "CC      = ${CC}"
 
 jamutils:
-	@for i in ${SUBDIRS}; do cd $$i; ${CC} $$i.c ${CFLAGS} ${LDFLAGS} -o\
-		$$i; cd ..; done;
+	@for i in ${SUBDIRS}; do cd $$i; ${CC} -c $$i.c ${CFLAGS} -o $$i.o;\
+		${CC} $$i.o ${LDFLAGS} -o $$i; sed\
+		"s/JAMUTILS_VERSION/${VERSION}/g" < $$i.1 | gzip > $$i.1.gz;\
+		cd ..; done;
 
 clean:
-	@for i in ${SUBDIRS}; do cd $$i; rm -f $$i; cd ..; done;
+	@for i in ${SUBDIRS}; do cd $$i; rm -f "$$i" "$$i.1.gz" "$$i.o"; cd\
+		..; done;
 	rm -f jamutils-${VERSION}.tar.gz
-	@echo cleaned Jamutils
+	@echo "Cleaned Jamutils"
 
 dist: clean
 	mkdir -p jamutils-${VERSION}
@@ -88,24 +94,25 @@ dist: clean
 	tar -cf jamutils-${VERSION}.tar jamutils-${VERSION}
 	gzip jamutils-${VERSION}.tar
 	rm -rf jamutils-${VERSION}
-	@echo created distribution jamutils-${VERSION}.tar.gz
+	@echo "Created distribution jamutils-${VERSION}.tar.gz"
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	@for i in ${SUBDIRS}; do cd $$i; cp -f $$i ${DESTDIR}${PREFIX}/bin;\
 		cd ..; done;
 	@for i in ${SUBDIRS}; do chmod 755 ${DESTDIR}${PREFIX}/bin/$$i; done;
-	@echo installed Jamutils to ${DESTDIR}${PREFIX}/bin
+	@echo "Installed Jamutils to ${DESTDIR}${PREFIX}/bin"
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@for i in ${SUBDIRS}; do cd $$i; cp -f $$i.1\
+	@for i in ${SUBDIRS}; do cd $$i; cp -f $$i.1.gz \
 		${DESTDIR}${MANPREFIX}/man1; cd ..; done;
-	@for i in ${SUBDIRS}; do chmod 644 ${DESTDIR}${MANPREFIX}/man1/$$i.1;\
-		done;
-	@echo Man pages copied to ${DESTDIR}${MANPREFIX}/man1
+	@for i in ${SUBDIRS}; do chmod 644\
+		${DESTDIR}${MANPREFIX}/man1/$$i.1.gz; done;
+	@echo "Copied manual pages to ${DESTDIR}${MANPREFIX}/man1"
 
 uninstall:
 	@for i in ${SUBDIRS}; do rm -f ${DESTDIR}${PREFIX}/bin/$$i; done;
-	@for i in ${SUBDIRS}; do rm -f ${DESTDIR}${MANPREFIX}/man1/$$i.1; done;
-	@echo uninstalled Jamutils
+	@for i in ${SUBDIRS}; do rm -f ${DESTDIR}${MANPREFIX}/man1/$$i.1.gz;\
+		done;
+	@echo "Uninstalled Jamutils"
 
 .PHONY: all options jamutils clean dist install uninstall

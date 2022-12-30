@@ -1,44 +1,42 @@
-/* uptime: print how long the system has been running.
+/* uptime: print the uptime of the system.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
- * Copyright (C) 2021 Benjamin Brady <benjamin@benjaminbrady.ie>
+ * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * <https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <stdio.h>
-#include <sys/sysinfo.h>
-
-#define ifzero(x) if (x < 10) printf("0")
 
 int
 main(void)
 {
-	unsigned long uptime, d, h, m, s;
-	struct sysinfo u;
-	sysinfo(&u);
-	uptime = u.uptime;
-	s = uptime % 60;
-	m = ((uptime - s) / 60) % 60;
-	h = ((uptime - m - s) / 3600) % 24;
-	d = ((uptime - h - m - s) / 86400);
-	if (d > 0) printf("%lu days ", d);
-	ifzero(h);
-	printf("%lu:", h);
-	ifzero(m);
-	printf("%lu:", m);
-	ifzero(s);
-	printf("%lu\n", s);
-	return 0;
+	int status;
+	char time[BUFSIZ]; /* Can be higher than eleven + EOF after 99 days */
+	FILE *ps;
+
+	/* There are no POSIX system calls for ascertaining process time;
+	 * nonetheless, we are able to use the system's implementation of ps to
+	 * check the elapsed time of a process */
+	if ((ps = popen("ps -o etime= -p 1", "r")) == NULL) {
+		perror("popen");
+		return 1;
+	};
+	(void) fgets(time, sizeof(time), ps);
+	status = pclose(ps);
+
+	if (status == 0) fputs(time, stdout);
+
+	return status;
 }

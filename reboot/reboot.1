@@ -1,21 +1,21 @@
-.TH REBOOT 1 reboot
+.TH REBOOT 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
-reboot - hard reset the system if possible
+reboot \- hard reset the system via Linux.
 .SH SYNOPSIS
 .B reboot
 .SH DESCRIPTION
-Reboot the system if possible (the caller must have sufficient privileges in
-the form of having CAP_SYS_BOOT inside their user namespace).
+Call the Linux reboot() function with LINUX_REBOOT_CMD_RESTART. This has the
+effect of rebooting the system if the Linux kernel is installed.
 
-This is a Linux-specific system call and thus is only guaranteed
-to work if Linux is the currently running kernel.
+The caller must have sufficient privileges in the form of having CAP_SYS_BOOT
+inside of their user namespace.
 .SH AUTHOR
 Written by Benjamin Brady.
 .SH COPYRIGHT
-Copyright \(co 2021 Benjamin Brady. License GPLv3+: GNU GPL version 3 or later
-<https://gnu.org/licenses/gpl.html>. This is free software: you are free to
-change and redistribute it. There is NO WARRANTY, to the extent permitted by
+Copyright \(co 2021\-2022 Benjamin Brady. License GPLv3+: GNU GPL version 3 or
+later <https://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
 law.
 .SH SEE ALSO
-Jam Coreutils full documentation and source code is located at
+Jamutils full documentation and source code is located at
 <git://benjaminbrady.ie/jamutils.git/>.

@@ -1,13 +1,13 @@
-.TH DIRNAME 1 dirname
+.TH DIRNAME 1 "March 2022" Jamutils-JAMUTILS_VERSION
 .SH NAME
 dirname \- return the directory portion of a pathname
 .SH SYNOPSIS
 .B dirname
-.I string
+.I pathname
 .SH DESCRIPTION
-Treat the
-.I string
-operand as an XBD pathname and print the path prefix.
+Strip the filename from each XBD
+.I pathname
+and print the result to standard output.
 .SH EXIT STATUS
 .TP
 .B 0

@@ -1,22 +1,22 @@
 /* mv: move files.
  *
- * This file is part of Jam Coreutils.
+ * This file is part of Jamutils.
  *
  * Copyright (C) 2021-2022 Benjamin Brady <benjamin@benjaminbrady.ie>
  *
- * Jam Coreutils is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Jamutils is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Jam Coreutils is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING. If not, see
- * https://www.gnu.org/licenses/>. */
+ * Jamutils is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Jamutils; see the file COPYING. If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <errno.h>
 #include <libgen.h>
 #include <stdio.h>
@@ -26,7 +26,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "../arg.h"
+#include "arg.h"
 
 #define _(a) (a)
 
@@ -53,7 +53,8 @@ move(const char *src, const char *target)
 #endif
 
 	if ((access(target, F_OK) == 0) && (!fflg) && (((access(target, W_OK) <
-						0) && isatty(0)) || (iflg))) {
+						0) && isatty(STDIN_FILENO)) ||
+				(iflg))) {
 		fprintf(stderr, _("overwrite \'%s\'? "), target);
 		if (!(prompt())) return;
 	};
@@ -88,10 +89,12 @@ int
 prompt(void)
 {
 	/* TODO: add NLS */
-	int val;
-	int c = getchar();
+	int val, c;
 
+	fflush(stdout);
+	c = getchar();
 	val = (c == 'y' || c == 'Y');
+
 	while (c != '\n' && c != EOF) c = getchar();
 
 	return val;
@@ -175,7 +178,7 @@ usage:
 		len = strlen(argv[argc-1]) + 1 + 1; /* path + / + NUL */
 		for (i = 0; i < argc-1; i++) {
 			base = basename(argv[i]);
-			target = malloc(len+strlen(base)); /* + name */
+			target = (char *) malloc(len+strlen(base)); /* +name */
 			sprintf(target, "%s/%s", argv[argc-1], base);
 			move(argv[i], target);
 			free(target);
